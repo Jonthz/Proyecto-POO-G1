@@ -8,6 +8,6 @@ package Vehiculos_Package;
  *
  * @author Scarlet Cevallos
  */
-public class Camionetas {
+public class Camionetas extends Vehiculo{
     
 }
