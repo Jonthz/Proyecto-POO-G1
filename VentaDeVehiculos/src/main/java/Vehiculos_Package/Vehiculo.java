@@ -107,5 +107,7 @@ public class Vehiculo {
         this.precio = precio;
     }
     
-    
+    public static Vehiculo buscarPorPlaca(ArrayList){
+        
+    }
 }
