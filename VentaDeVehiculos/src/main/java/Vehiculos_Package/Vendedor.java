@@ -4,10 +4,17 @@
  */
 package Vehiculos_Package;
 
+import java.util.Scanner;
+
 /**
  *
  * @author HP
  */
 public class Vendedor extends Usuario {
     
+public Vendedor(int id, String n,String ap, String org, String correo, String clave){
+        super(id,n,ap,org,correo,Utilitaria.claveHash(clave));
+    }
+
+
 }
