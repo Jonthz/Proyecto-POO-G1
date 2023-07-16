@@ -12,10 +12,11 @@ import java.util.Scanner;
  * @author HP
  */
 public class Vendedor extends Usuario {
+
     private ArrayList<Vehiculo> vehiculos;
-    
-public Vendedor(int id, String n,String ap, String org, String correo, String clave){
-        super(id,n,ap,org,correo,Utilitaria.claveHash(clave));
+
+    public Vendedor(int id, String n, String ap, String org, String correo, String clave) {
+        super(id, n, ap, org, correo, Utilitaria.claveHash(clave));
         this.vehiculos = new ArrayList<>();
     }
 
@@ -51,6 +52,7 @@ public Vendedor(int id, String n,String ap, String org, String correo, String cl
         this.organizacion = organizacion;
     }
 
+    @Override
     public String getCorreoElectronico() {
         return correoElectronico;
     }
@@ -67,38 +69,111 @@ public Vendedor(int id, String n,String ap, String org, String correo, String cl
         this.clave = clave;
     }
 
-
-
-public static void ingresarSistema(String nomfileVehiculo, String nomfileVendedor){
-    ArrayList<Usuario> users = Usuario.readFile(nomfileVendedor);
-    Scanner sc = new Scanner(System.in);
-    sc.useDelimiter("\n");
-    System.out.println("Ingrese su correo");
-    String correo = sc.nextLine();
-    System.out.println("Ingrese su clave");
-    String clave = sc.nextLine();
-    Vendedor v = Vendedor.buscarPorCorreo(users, correo);
-    if(v.validarClave(clave)){
-        System.out.println("Ingrese la placa: ");
-        String placa
+    public ArrayList<Vehiculo> getVehiculos() {
+        return vehiculos;
     }
-    else{
-        
-    }
-}
-public boolean validarClave(String clave){
-    String clave_h = Utilitaria.claveHash(clave);
-    return this.clave.equals(clave_h);
-}
 
-public static Vendedor buscarPorCorreo(ArrayList<Usuario> users, String correo){
-    for(Usuario u: users){
-        if(u.correoElectronico.equals(correo)){
-            return (Vendedor)u;      
+    public void setVehiculos(ArrayList<Vehiculo> vehiculos) {
+        this.vehiculos = vehiculos;
+    }
+    
+
+    public void ingresarSistema(String nomfileVehiculo, String nomfileVendedor) {
+        ArrayList<Usuario> users = Usuario.readFile(nomfileVendedor);
+        Scanner sc = new Scanner(System.in);
+        sc.useDelimiter("\n");
+        System.out.println("Ingrese su correo");
+        String correo = sc.nextLine();
+        System.out.println("Ingrese su clave");
+        String clave = sc.nextLine();
+        Vendedor v = Vendedor.buscarPorCorreo(users, correo);
+        if (v.validarClave(clave)) {
+            System.out.println("Ingrese el tipo de vehiculo");
+            String tipo_V = sc.nextLine();
+            boolean ing_v_validate = ingresarVehiculo(tipo_V);
+            while(!ing_v_validate){
+                System.out.println("La placa ingresada ya existe en los registros.");
+            }
+            if(ing_v_validate){
+                System.out.println("El vehiculo se ingreso exitosamente!");
+            }
+        } else {
+            System.out.println("La contraseña es incorrecta");
         }
-      return null;  
     }
-        
-} 
+
+    public boolean ingresarVehiculo(String tipo_vehiculo) {
+        Scanner sc2 = new Scanner(System.in);
+        System.out.print("Ingrese la placa: ");
+        String placa = sc2.nextLine();
+        sc2.nextLine();
+        for(Vehiculo v: vehiculos){
+            if(v.getPlaca().equals(placa)){
+                return false;
+            }
+        }
+        System.out.println("Ingrese la marca del vehículo: ");
+        String marca = sc2.nextLine();
+        sc2.nextLine();
+        System.out.println("Ingrese el modelo del vehículo: ");
+        String modelo = sc2.nextLine();
+        sc2.nextLine();
+        System.out.println("Ingrese el tipo de motor del vehículo: ");
+        String tipoMotor = sc2.nextLine();
+        sc2.nextLine();
+        System.out.println("Ingrese el año del vehículo: ");
+        String anioVehiculo = sc2.nextLine();
+        sc2.nextLine();
+        System.out.println("Ingrese el recorrido del vehículo: ");
+        String recorrido = sc2.nextLine();
+        sc2.nextLine();
+        System.out.println("Ingrese el color del vehículo: ");
+        String color = sc2.nextLine();
+        sc2.nextLine();
+        System.out.println("Ingrese el tipo de combustible del vehículo: ");
+        String tipoCombustible = sc2.nextLine();
+        sc2.nextLine();
+        double precio_V;
+        if (tipo_vehiculo.equals("Auto") || tipo_vehiculo.equals("Camioneta")) {
+            System.out.println("Ingrese vidrio del vehiculo: ");
+            String vidrio = sc2.nextLine();
+            sc2.nextLine();
+            System.out.println("Ingrese transmision del vehiculo: ");
+            String transmision = sc2.nextLine();
+            sc2.nextLine();
+            System.out.println("Ingrese tracción  del vehiculo: ");
+            String traccion = sc2.nextLine();
+            sc2.nextLine();
+            System.out.println("Ingrese el precio del Vehiculo: ");
+            precio_V = sc2.nextDouble();
+            
+            if (tipo_vehiculo.equals("Auto")) {
+                Auto auto_add = new Auto(vidrio, transmision, placa, marca, modelo, tipoMotor, anioVehiculo, recorrido, color, tipoCombustible, precio_V);
+                vehiculos.add(auto_add);
+            }else if(tipo_vehiculo.equals("Camioneta")){
+                Camionetas cam_add = new Camionetas(vidrio, transmision, traccion, placa, marca, modelo, tipoMotor, anioVehiculo, recorrido, color, tipoCombustible, precio_V);
+                vehiculos.add(cam_add);
+            }
+        }else {
+            System.out.println("Ingrese el precio del Vehiculo: ");
+            precio_V = sc2.nextDouble();
+            vehiculos.add(new Vehiculo(placa, marca, modelo, tipoMotor, color, recorrido, color, tipoCombustible, precio_V));
+        }
+        return true;
+    }
+
+    public boolean validarClave(String clave) {
+        String clave_h = Utilitaria.claveHash(clave);
+        return this.clave.equals(clave_h);
+    }
+
+    public static Vendedor buscarPorCorreo(ArrayList<Usuario> users, String correo) {
+        for (Usuario u : users) {
+            if (u.correoElectronico.equals(correo)) {
+                return (Vendedor) u;
+            }
+        }
+        return null;
+    }
 
 }
