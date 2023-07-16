@@ -11,10 +11,10 @@ package Vehiculos_Package;
 public class Camionetas extends Vehiculo{
     private String vidrios;
     private String transmision;
-    private String traccion;
+    private int traccion;
 
-    public Camionetas(String vidrios, String transmision, String traccion, String placa, String marca, String modelo, String tipoMotor, String anio, String recorrido, String color, String tipoCombustible, double precio) {
-        super(placa, marca, modelo, tipoMotor, anio, recorrido, color, tipoCombustible, precio);
+    public Camionetas(int id, TipoVehiculo tipo,String placa, String marca, String modelo, String tipoMotor, int anio, int recorrido, String color, String tipoCombustible, double precio,String vidrios, String transmision, int traccion) {
+        super(id,tipo,placa, marca, modelo, tipoMotor, anio, recorrido, color, tipoCombustible, precio);
         this.vidrios = vidrios;
         this.transmision = transmision;
         this.traccion = traccion;

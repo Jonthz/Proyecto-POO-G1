@@ -6,7 +6,11 @@ package Vehiculos_Package;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -14,8 +18,10 @@ import java.util.Scanner;
  * @author HP
  */
 public class Comprador extends Usuario {
-    public Comprador(String n,String ap, String org, String correo, String clave){
-        super(Utilitaria.generarID("compradores.txt"),n,ap,org,correo,Utilitaria.claveHash(clave));
+    private ArrayList<Oferta> ofertas;
+    public Comprador(int id,String n,String ap, String org, String correo, String clave){
+        super(id,n,ap,org,correo,Utilitaria.claveHash(clave));
+        this.ofertas= new ArrayList<>();
     }
     public Comprador(){
         super();
@@ -68,8 +74,16 @@ public class Comprador extends Usuario {
     public void setClave(String clave) {
         this.clave = clave;
     }
+
+    public ArrayList<Oferta> getOfertas() {
+        return ofertas;
+    }
+
+    public void setOfertas(ArrayList<Oferta> ofertas) {
+        this.ofertas = ofertas;
+    }
     
-    public static void registrarComprador(){
+    public static void registrarComprador(String nomFile){
         Scanner sc = new Scanner(System.in);
         sc.useDelimiter("\n");
         System.out.println("Ingrese sus siguentes datos");
@@ -83,9 +97,11 @@ public class Comprador extends Usuario {
         String organizacion=sc.nextLine();
         System.out.println("Clave: ");
         String clave= sc.nextLine();
-        Comprador c= new Comprador(nombre,apellido,organizacion,correo,clave);
+        int id= Utilitaria.generarID(nomFile);
+        Comprador c= new Comprador(id,nombre,apellido,organizacion,correo,clave);
+        sc.close();
         //acuerdate del metodo validar si lees esto Jonathan XDXD
-        c.saveFileComp("compradores.txt");
+        c.saveFileComp(nomFile);
         
     }
     public void saveFileComp(String nomFile){
@@ -96,5 +112,94 @@ public class Comprador extends Usuario {
             System.out.println(e.getMessage());
         }
     }
-    public 
+    public static void hacerOferta(){
+        
+    }
+    public ArrayList<Vehiculo> buscarVehiculos(ArrayList <Vehiculo> vehiculos){
+        ArrayList<Vehiculo> vehiculos_encontrados= new ArrayList<>();
+        Scanner sc= new Scanner(System.in);
+        sc.useDelimiter("\n");
+        System.out.println("Ingrese los atributos con los que quiere buscar los vehiculos, si quiere buscar todas las opciones de un atributo deje vacio");
+        System.out.println("Tipo de Vehiculo: ");
+        TipoVehiculo tipo= Utilitaria.obtenerTipoVehiculo(sc);
+        System.out.println("Recorrido minimo: ");
+        int recorr_min= Utilitaria.obtenerEntero(sc);
+        System.out.println("Recorrido maximo: ");
+        int recorr_max=Utilitaria.obtenerEntero(sc);
+        System.out.println("Año minimo");
+        int anio_min=Utilitaria.obtenerEntero(sc);
+        System.out.println("Año maximo");
+        int anio_max=Utilitaria.obtenerEntero(sc);
+        System.out.println("Precio minimo");
+        double prec_min=Utilitaria.obtenerDouble(sc);
+        System.out.println("Precio maximo");
+        double prec_max=Utilitaria.obtenerDouble(sc);
+        sc.close();
+        for(Vehiculo v: vehiculos){
+            if((tipo==null||tipo==v.getTipo())&&(v.getRecorrido()>=recorr_min)&&(v.getRecorrido()<=recorr_max)&&(v.getAnio()>=anio_min)&&(v.getAnio()<=anio_max)&&(v.getPrecio()>=prec_min)&&(v.getPrecio()<=prec_max)){
+                vehiculos_encontrados.add(v);
+            }
+        }
+        if(vehiculos_encontrados.isEmpty()){
+            System.out.println("No se ha encontrado ningun vehiculo que coincida con la busqueda");
+        }
+        return vehiculos_encontrados;
+    }
+    public void recorrerVehiculos(ArrayList<Vehiculo> vehiculos){
+        int indice=0;
+        boolean revisarAnteriorVehiculo=false;
+        while(true){
+            if(!revisarAnteriorVehiculo){
+                System.out.println("Informacion del Vehiculo:");
+                System.out.println(vehiculos.get(indice));
+            }
+            System.out.println("¿Que desea hacer?");
+            System.out.println("Para avanzar al siguiente vehiculo ingrese S");
+            System.out.println("Para retroceder al anterior vehiculo ingrese A");
+            System.out.println("Para terminar con la busqueda ingrese T");
+            System.out.println("Para ofertar por un vehiculo ingrese O");
+            Scanner sc= new Scanner(System.in);
+            sc.useDelimiter("\n");
+            String opcion = sc.nextLine();
+            if(opcion.equalsIgnoreCase("S")){
+                if(!revisarAnteriorVehiculo){
+                    indice+=1;
+                }
+                revisarAnteriorVehiculo=false;
+                if(indice>=vehiculos.size()){
+                    System.out.println("Ha revisado todos los vehiculos");
+                    revisarAnteriorVehiculo=false;
+                }
+            }
+            else if(opcion.equalsIgnoreCase("A")){
+                if(revisarAnteriorVehiculo){
+                    indice-=1;
+                }
+                revisarAnteriorVehiculo=true;
+                if(indice<0){
+                    System.out.println("No existen vehiculos anteriores");
+                    revisarAnteriorVehiculo=false;
+                }
+            }
+            else if(opcion.equalsIgnoreCase("T")){
+                break;
+            }
+            else if(opcion.equalsIgnoreCase("O")){
+                Vehiculo vof= vehiculos.get(indice);
+                System.out.println("Ingrese el precio ofertado: ");
+                double preciof= sc.nextDouble();
+            }
+            else{
+                System.out.println("Intente otra vez");
+            }
+        }
+    }
+    public void registrarOferta(Vehiculo v, double precio){
+        try(PrintWriter pw= new PrintWriter(new FileOutputStream(new File("ofertas.txt"),true))){
+            pw.println(v.toString()+"|"+precio);
+        }
+        catch(Exception e){
+            System.out.println("Erro al registrar la oferta del vehiculo"+e.getMessage());
+        }
+    }
 }
