@@ -39,7 +39,6 @@ public class Vehiculo {
         this.tipoCombustible = tipoCombustible;
         this.precio = precio;
         this.ofertas = new ArrayList<>();
-        this.vendedor= new Vendedor();
     } 
 
     public int getId() {

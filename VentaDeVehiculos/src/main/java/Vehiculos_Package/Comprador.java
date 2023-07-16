@@ -145,4 +145,61 @@ public class Comprador extends Usuario {
         }
         return vehiculos_encontrados;
     }
+    public void recorrerVehiculos(ArrayList<Vehiculo> vehiculos){
+        int indice=0;
+        boolean revisarAnteriorVehiculo=false;
+        while(true){
+            if(!revisarAnteriorVehiculo){
+                System.out.println("Informacion del Vehiculo:");
+                System.out.println(vehiculos.get(indice));
+            }
+            System.out.println("¿Que desea hacer?");
+            System.out.println("Para avanzar al siguiente vehiculo ingrese S");
+            System.out.println("Para retroceder al anterior vehiculo ingrese A");
+            System.out.println("Para terminar con la busqueda ingrese T");
+            System.out.println("Para ofertar por un vehiculo ingrese O");
+            Scanner sc= new Scanner(System.in);
+            sc.useDelimiter("\n");
+            String opcion = sc.nextLine();
+            if(opcion.equalsIgnoreCase("S")){
+                if(!revisarAnteriorVehiculo){
+                    indice+=1;
+                }
+                revisarAnteriorVehiculo=false;
+                if(indice>=vehiculos.size()){
+                    System.out.println("Ha revisado todos los vehiculos");
+                    revisarAnteriorVehiculo=false;
+                }
+            }
+            else if(opcion.equalsIgnoreCase("A")){
+                if(revisarAnteriorVehiculo){
+                    indice-=1;
+                }
+                revisarAnteriorVehiculo=true;
+                if(indice<0){
+                    System.out.println("No existen vehiculos anteriores");
+                    revisarAnteriorVehiculo=false;
+                }
+            }
+            else if(opcion.equalsIgnoreCase("T")){
+                break;
+            }
+            else if(opcion.equalsIgnoreCase("O")){
+                Vehiculo vof= vehiculos.get(indice);
+                System.out.println("Ingrese el precio ofertado: ");
+                double preciof= sc.nextDouble();
+            }
+            else{
+                System.out.println("Intente otra vez");
+            }
+        }
+    }
+    public void registrarOferta(Vehiculo v, double precio){
+        try(PrintWriter pw= new PrintWriter(new FileOutputStream(new File("ofertas.txt"),true))){
+            pw.println(v.toString()+"|"+precio);
+        }
+        catch(Exception e){
+            System.out.println("Erro al registrar la oferta del vehiculo"+e.getMessage());
+        }
+    }
 }
