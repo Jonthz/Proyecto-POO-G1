@@ -4,6 +4,8 @@
  */
 package Vehiculos_Package;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Scarlet Cevallos
@@ -12,9 +14,15 @@ public class Auto extends Vehiculo{
     private String vidrios;
     private String transmision;
 
-    public Auto(String vidrios, String transmision, String placa, String marca, String modelo, String tipoMotor, String anio, String recorrido, String color, String tipoCombustible, double precio) {
-        super(placa, marca, modelo, tipoMotor, anio, recorrido, color, tipoCombustible, precio);
+    public Auto(String vidrios, String transmision, String placa, String marca, String modelo, String tipoMotor, String anio, String recorrido, String color, String tipoCombustible, double precio, ArrayList<Oferta> ofertas) {
+        super(placa, marca, modelo, tipoMotor, anio, recorrido, color, tipoCombustible, precio, ofertas);
         this.vidrios = vidrios;
         this.transmision = transmision;
-    } 
+    }
+   
+    
+    public String toString() {
+        return super.toString() + "\nVidrios: " + vidrios + "\nTransmisión: " + transmision;
+    }
+    
 }
