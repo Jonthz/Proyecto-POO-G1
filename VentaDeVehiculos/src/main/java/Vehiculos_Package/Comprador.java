@@ -174,7 +174,18 @@ public class Comprador extends Usuario {
         while(true){
             if(!revisarAnteriorVehiculo){
                 System.out.println("Informacion del Vehiculo:");
-                System.out.println(vehiculos.get(indice));
+                Vehiculo v = vehiculos.get(indice);
+                if(v instanceof Auto){
+                    Auto a=(Auto)v;
+                    System.out.println(a.toString());
+                }
+                else if(v instanceof Camionetas){
+                    Camionetas cam=(Camionetas)v;
+                    System.out.println(cam.toString());
+                }
+                else{
+                    System.out.println(v.toString());
+                }
             }
             System.out.println("¿Que desea hacer?");
             System.out.println("Para avanzar al siguiente vehiculo ingrese S");
