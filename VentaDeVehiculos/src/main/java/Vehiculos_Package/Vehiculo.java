@@ -4,6 +4,9 @@
  */
 package Vehiculos_Package;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 /**
@@ -137,6 +140,7 @@ public class Vehiculo {
         this.precio = precio;
     }
     
+
     public static Vehiculo buscarPorPlaca(ArrayList<Vehiculo> vehiculos, String placa){
         for(Vehiculo v: vehiculos){
         if(v.placa.equals(placa)){
@@ -144,6 +148,26 @@ public class Vehiculo {
         }
         }
       return null; 
+    }
+     public void saveFile(String nomfile){
+        try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(nomfile), true))){
+            pw.println(this.placa+"|"+this.marca+"|"+this.modelo+"|"+this.tipoMotor+"|"+this.anio+"|"+this.recorrido+"|"+this.color+"|"+this.tipoCombustible+"|"+this.precio+"|"+this.ofertas);
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+    // si quiero guardar toda la info a partir de un archivo o una lista
+    public static void saveFile(ArrayList<Usuario> usuarios, String nomfile){
+        try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(nomfile), true))){
+            for(Usuario u: usuarios){
+                pw.println(u.id+"|"+u.nombre+"|"+u.apellidos+"|"+u.organizacion+"|"+u.correo+"|"+u.clave);
+            }
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+
     }
         
 }
