@@ -119,7 +119,7 @@ public class Oferta {
       return null; 
     }
     
-      public static void revisarOfertaActual(int ind, ArrayList<Oferta> ofertas) {
+      public static Oferta revisarOfertaActual(int ind, ArrayList<Oferta> ofertas) {
         if (ind >= 0 && ind < ofertas.size()) {
             Oferta ofertaActual = ofertas.get(ind);
             System.out.println("Oferta #" + (ind + 1) + ":");

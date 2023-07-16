@@ -91,12 +91,13 @@ public class Vendedor extends Usuario {
         System.out.println("Ingrese la placa: ");
         String placa = sc.nextLine();
         Vehiculo vehiculo = Vehiculo.buscarPorPlaca(vehiculos, placa);
-        vehiculo.ofertas = Oferta.readFile(nomfileOferta);
+        vehiculo.ofertas = Vehiculo.rellenarOfertasVehiculo(nomfileOferta, vehiculo);
         System.out.println(vehiculo.marca + vehiculo.modelo + "Precio: " + vehiculo.precio);
         System.out.println("Se han realizado" + vehiculo.ofertas.size() + "ofertas");
-        Vendedor.recorrerOfertas(vehiculo.ofertas, sc, nomfileVehiculo, vehiculo, vehiculos);
-        
+        Vendedor.recorrerOfertas(vehiculo.ofertas, sc, nomfileVehiculo, vehiculo, vehiculos);    
     }
+    else
+            System.out.println("Clave incorrecta");
         
     }
 //        Oferta oferta = Oferta.buscarPorIdVehiculo(ofertas, vehiculo.id);
@@ -125,6 +126,7 @@ public class Vendedor extends Usuario {
                 case "3":
                     System.out.println("Oferta aceptada");
                     Vehiculo.eliminarVehiculo(nomfileVehiculo, vehiculo, vehiculos);
+                    Utilitaria.enviarConGMail(ofertas.get(ind).getComprador().correoElectronico, "Oferta aceptada", "Su oferta para el vehiculo" + vehiculo.marca + vehiculo.modelo + "ha sido aceptada");
                     break;
                 default:
                     System.out.println("Opción inválida. Inténtalo de nuevo.");
