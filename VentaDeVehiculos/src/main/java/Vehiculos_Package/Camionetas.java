@@ -4,6 +4,8 @@
  */
 package Vehiculos_Package;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Scarlet Cevallos
@@ -19,4 +21,8 @@ public class Camionetas extends Vehiculo{
         this.transmision = transmision;
         this.traccion = traccion;
     }
+    
+    public String toString() {
+        return super.toString() + "\nVidrios: " + vidrios + "\nTransmisión: " + transmision + "\nTraccion: " + traccion;
+    }   
 }
