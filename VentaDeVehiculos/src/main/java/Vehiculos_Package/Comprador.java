@@ -231,11 +231,49 @@ public class Comprador extends Usuario {
     }
     public static void registrarOferta(String nomFile,Vehiculo v, double precio,Comprador c){
         try(PrintWriter pw= new PrintWriter(new FileOutputStream(new File("ofertas.txt"),true))){
+            boolean ofertaExistente= false;
             int idOfe= Utilitaria.generarID(nomFile);
-            pw.println(idOfe+"+"+v.getId()+"|"+c.getId()+"|"+precio);
+            try(Scanner sc = new Scanner(new File(nomFile))){
+                while(sc.hasNextLine()){
+                    String linea= sc.nextLine();
+                    String[] tokens= linea.split("\\|");
+                    int idVE= Integer.parseInt(tokens[1]);
+                    int idCE= Integer.parseInt(tokens[2]);
+                    double precE= Double.parseDouble(tokens[3]);
+                    if((idVE==v.getId())&&(idCE==c.getId())){
+                        ofertaExistente=true;
+                        System.out.println("Ya hiciste una oferta del mismo vehiculo");
+                        System.out.println("Precio por el que ofertaste:"+precE);
+                        System.out.println("¿Que quiere hacer?");
+                        System.out.println("1. Cambiar el precio");
+                        System.out.println("2. Eliminar la oferta");
+                        System.out.println("Ingrese la opcion");
+                        int opcion= sc.nextInt();
+                        switch(opcion){
+                        case 1 -> {
+                            System.out.println("Ingrese el nuevo precio:");
+                            int newPrecio= sc.nextInt();
+                            precE=newPrecio;
+                            System.out.println("El precio de la oferta ha sido cambiado");
+                            break;
+                        }
+                        case 2 -> System.out.println("La oferta ha sido eliminada");
+                        default -> {
+                            System.out.println("Ha ingresado una opcion invalida, la oferta sigue siendo la misma");
+                            break;
+                            }
+                        }
+                    }
+                    pw.println(tokens[0]+"|"+idVE+"|"+idCE+"|"+precE);
+                }
+            }
+            if(!ofertaExistente){
+                pw.println(idOfe+"+"+v.getId()+"|"+c.getId()+"|"+precio); 
+            }
+            System.out.println("La oferta ha sido registrada exitosamente");
         }
         catch(Exception e){
-            System.out.println("Erro al registrar la oferta del vehiculo"+e.getMessage());
+            System.out.println("Error al registrar la oferta del vehiculo"+e.getMessage());
         }
     }
     public static void accederHacerOferta(){
