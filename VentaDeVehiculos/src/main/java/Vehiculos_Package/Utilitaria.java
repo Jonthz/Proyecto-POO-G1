@@ -4,12 +4,18 @@
  */
 package Vehiculos_Package;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -51,9 +57,9 @@ public class Utilitaria {
             System.out.println("4. Regresar");
             opcion_selec=sc.nextInt();
             switch(opcion_selec){
-                case 1 -> v.registrarVendedor();
-                case 2 -> v.registrarVehiculo();
-                case 3 -> v.aceptarOferta();
+                case 1 -> Vendedor.registrarVendedor();
+                case 2 -> Vendedor.registrarVehiculo();
+                case 3 -> Vendedor.aceptarOferta();
                 case 4 -> {
                 }
                 default -> System.out.println("Opcion invalida. Intente de nuevo");
@@ -72,8 +78,8 @@ public class Utilitaria {
             System.out.println("3. Regresar");
             opcion_selec=sc.nextInt();
             switch(opcion_selec){
-                case 1 -> Comprador.registrarComprador();
-                case 2 -> c.hacerOferta();
+                case 1 -> Comprador.registrarComprador("compradores.txt");
+                case 2 -> Comprador.hacerOferta();
                 case 3 ->{
                 }
                 default -> System.out.println("Opcion invalida. Intente de nuevo");
@@ -85,6 +91,10 @@ public class Utilitaria {
     public static int generarID(String nomFile){
         int id=0;
         try(Scanner sc= new Scanner(new File(nomFile))){
+             if (!(sc.hasNextLine())) {
+                id = 0; // Reiniciar el contador de IDs
+                System.out.println("El archivo de vehículos está vacío. Los IDs han sido reiniciados.");
+            }
            while(sc.hasNextLine()){
                String linea=sc.nextLine();
                String [] tokens = linea.split("\\|");
@@ -111,5 +121,85 @@ public class Utilitaria {
             e.printStackTrace();
         }
          return null;
+    }
+    public static ArrayList<Comprador> leerCompradores(String nomFile){
+        ArrayList<Comprador> compradores= new ArrayList<>();
+        try(Scanner sc= new Scanner(new File(nomFile))){
+            while(sc.hasNextLine()){
+                String linea= sc.nextLine();
+                String [] tokens= linea.split("\\|");
+                Comprador c= new Comprador(Integer.parseInt(tokens[0]),tokens[1],tokens[2],tokens[3],tokens[4],tokens[5]);
+                compradores.add(c);
+            }
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return compradores;
+    }
+    public static void vaciarArchivo(String nomFile) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomFile, false))) {
+            // Sobrescribir el archivo con una cadena vacía
+            writer.write("");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public static ArrayList<Vehiculo> leerVehiculos(String nomFile){
+        ArrayList<Vehiculo> vehiculos= new ArrayList<>();
+        try(Scanner sc= new Scanner(new File(nomFile))){
+            while(sc.hasNextLine()){
+                String linea= sc.nextLine();
+                String [] tokens= linea.split("\\|");
+                TipoVehiculo tipo= TipoVehiculo.valueOf(tokens[1].toUpperCase());
+                Vehiculo v;
+                switch(tipo){
+                    case AUTO:
+                        v= new Auto(Integer.parseInt(tokens[0]),tipo,tokens[2],tokens[3],tokens[4],tokens[5],Integer.parseInt(tokens[6]),Integer.parseInt(tokens[7]),tokens[8],tokens[9],Double.parseDouble(tokens[10]),tokens[11],tokens[12]);
+                        break;
+                    case CAMIONETA:
+                        v= new Camionetas(Integer.parseInt(tokens[0]),tipo,tokens[2],tokens[3],tokens[4],tokens[5],Integer.parseInt(tokens[6]),Integer.parseInt(tokens[7]),tokens[8],tokens[9],Double.parseDouble(tokens[10]),tokens[11],tokens[12],Integer.parseInt(tokens[13]));
+                        break;
+                    case MOTO:
+                        v= new Vehiculo(Integer.parseInt(tokens[0]),tipo,tokens[2],tokens[3],tokens[4],tokens[5],Integer.parseInt(tokens[6]),Integer.parseInt(tokens[7]),tokens[8],tokens[9],Double.parseDouble(tokens[10]));
+                        break;
+                    default:
+                        continue;
+                }
+                vehiculos.add(v);
+            }
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return vehiculos;
+    }
+    public static int obtenerEntero(Scanner scanner) {
+    String input = scanner.nextLine();
+    if (input.isEmpty()) {
+        return Integer.MIN_VALUE;
+        }
+    else{
+        return Integer.parseInt(input);
+        }
+    }
+
+    public static double obtenerDouble(Scanner scanner) {
+    String input = scanner.nextLine();
+    if (input.isEmpty()) {
+        return Double.MIN_VALUE;
+        }
+    else{
+        return Double.parseDouble(input);
+        } 
+    }
+    public static TipoVehiculo obtenerTipoVehiculo(Scanner sc) {
+    String tipo = sc.nextLine().toUpperCase();
+    try {
+        return TipoVehiculo.valueOf(tipo);
+        } 
+    catch (IllegalArgumentException e) {
+        return null;
+        }
     }
 }

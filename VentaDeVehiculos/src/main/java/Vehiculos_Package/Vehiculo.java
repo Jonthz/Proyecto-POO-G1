@@ -11,18 +11,24 @@ import java.util.ArrayList;
  * @author Scarlet Cevallos
  */
 public class Vehiculo {
+    protected int id;
+    protected TipoVehiculo tipo;
     protected String placa;
     protected String marca;
     protected String modelo;
     protected String tipoMotor;
-    protected String anio;
-    protected String recorrido;
+    protected int anio;
+    protected int recorrido;
     protected String color;
     protected String tipoCombustible;
     protected double precio;
     protected ArrayList<Oferta>ofertas;
+    protected Vendedor vendedor;
+
     
-    public Vehiculo(String placa, String marca, String modelo, String tipoMotor, String anio, String recorrido, String color, String tipoCombustible, double precio) {
+    public Vehiculo(int id, TipoVehiculo tipo,String placa, String marca, String modelo, String tipoMotor, int anio, int recorrido, String color, String tipoCombustible, double precio) {
+        this.id=id;
+        this.tipo=tipo;
         this.placa = placa;
         this.marca = marca;
         this.modelo = modelo;
@@ -33,8 +39,33 @@ public class Vehiculo {
         this.tipoCombustible = tipoCombustible;
         this.precio = precio;
         this.ofertas = new ArrayList<>();
+        this.vendedor= new Vendedor();
     } 
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public TipoVehiculo getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoVehiculo tipo) {
+        this.tipo = tipo;
+    }
+
+    public ArrayList<Oferta> getOfertas() {
+        return ofertas;
+    }
+
+    public void setOfertas(ArrayList<Oferta> ofertas) {
+        this.ofertas = ofertas;
+    }
+    
     public String getPlaca() {
         return placa;
     }
@@ -51,11 +82,11 @@ public class Vehiculo {
         return tipoMotor;
     }
 
-    public String getAnio() {
+    public int getAnio() {
         return anio;
     }
 
-    public String getRecorrido() {
+    public int getRecorrido() {
         return recorrido;
     }
 
@@ -87,11 +118,11 @@ public class Vehiculo {
         this.tipoMotor = tipoMotor;
     }
 
-    public void setAnio(String anio) {
+    public void setAnio(int anio) {
         this.anio = anio;
     }
 
-    public void setRecorrido(String recorrido) {
+    public void setRecorrido(int recorrido) {
         this.recorrido = recorrido;
     }
 
