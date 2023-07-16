@@ -69,6 +69,7 @@ public class Utilitaria {
         while(opcion_selec!=4);
     }
     public void menu_comprador(){
+        Comprador c= new Comprador();
         Scanner sc= new Scanner(System.in);
         int opcion_selec;
         do{
@@ -79,7 +80,7 @@ public class Utilitaria {
             opcion_selec=sc.nextInt();
             switch(opcion_selec){
                 case 1 -> Comprador.registrarComprador("compradores.txt");
-                case 2 -> Comprador.hacerOferta();
+                case 2 -> c.hacerOferta();
                 case 3 ->{
                 }
                 default -> System.out.println("Opcion invalida. Intente de nuevo");

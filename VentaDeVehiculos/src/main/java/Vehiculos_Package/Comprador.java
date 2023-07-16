@@ -112,8 +112,10 @@ public class Comprador extends Usuario {
             System.out.println(e.getMessage());
         }
     }
-    public static void hacerOferta(){
-        
+    public void hacerOferta(){
+        ArrayList<Vehiculo> vehiculos= Utilitaria.leerVehiculos("vehiculos.txt");
+        ArrayList<Vehiculo> vehiculosFiltrados= buscarVehiculos(vehiculos);
+        recorrerVehiculos(vehiculosFiltrados);
     }
     public ArrayList<Vehiculo> buscarVehiculos(ArrayList <Vehiculo> vehiculos){
         ArrayList<Vehiculo> vehiculos_encontrados= new ArrayList<>();
@@ -188,6 +190,7 @@ public class Comprador extends Usuario {
                 Vehiculo vof= vehiculos.get(indice);
                 System.out.println("Ingrese el precio ofertado: ");
                 double preciof= sc.nextDouble();
+                registrarOferta(vof,preciof);
             }
             else{
                 System.out.println("Intente otra vez");
