@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  *
@@ -151,14 +152,17 @@ public class Vehiculo {
         }
       return null; 
     }
-     public void saveFile(String nomfile){
-        try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(nomfile), true))){
+
+    public void saveFile(String nomfile){
+       try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(nomfile), true))){
+
             pw.println(this.placa+"|"+this.marca+"|"+this.modelo+"|"+this.tipoMotor+"|"+this.anio+"|"+this.recorrido+"|"+this.color+"|"+this.tipoCombustible+"|"+this.precio+"|"+this.ofertas);
-        }
-        catch(Exception e){
-            System.out.println(e.getMessage());
-        }
+       }
+       catch(Exception e){
+           System.out.println(e.getMessage());
+       }
     }
+
     // si quiero guardar toda la info a partir de un archivo o una lista
     public static void saveFile(ArrayList<Usuario> usuarios, String nomfile){
         try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(nomfile), true))){
@@ -199,5 +203,12 @@ public class Vehiculo {
             System.out.println("No puedes retroceder más, es la primera oferta.");
         }
     }
-        
+     
+    @Override
+    public String toString() {
+        return "placa: " + placa + "\nMarca: " + marca + "\nModelo: " + modelo + "\nTipo motor: " + tipoMotor + "\nAño: " + anio + "\nRecorrido: " + recorrido + "\nColor: " + color + "\nTipo combustible: " + tipoCombustible + "\nprecio: " + precio ;
+    
+    }
+
+
 }

@@ -4,6 +4,8 @@
  */
 package Vehiculos_Package;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Scarlet Cevallos
@@ -16,5 +18,10 @@ public class Auto extends Vehiculo{
         super(id,tipo,placa, marca, modelo, tipoMotor, anio, recorrido, color, tipoCombustible, precio);
         this.vidrios = vidrios;
         this.transmision = transmision;
-    } 
+    }
+   
+    public String toString() {
+        return super.toString() + "\nVidrios: " + vidrios + "\nTransmisión: " + transmision;
+    }
+    
 }
