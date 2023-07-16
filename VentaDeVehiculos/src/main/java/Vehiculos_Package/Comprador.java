@@ -93,16 +93,30 @@ public class Comprador extends Usuario {
         String apellido=sc.nextLine();
         System.out.println("Correo: ");
         String correo= sc.nextLine();
+        while(true){
+        if(Usuario.validarEstructuraCorreO(correo)){
+          if(Usuario.validarCorreoUnico(correo, nomFile)){
+            break;
+            }
+          else{
+            System.out.println("El correo ingresado ya se encuentra registrado. Intente de nuevo");
+            correo=sc.nextLine();
+            }  
+           }
+        else{
+            System.out.println("Se ha ingresado un correo no valido");
+            correo=sc.nextLine();
+           }
+        }
         System.out.println("Organización: ");
         String organizacion=sc.nextLine();
-        System.out.println("Clave: ");
+        System.out.println("Clave");
         String clave= sc.nextLine();
         int id= Utilitaria.generarID(nomFile);
         Comprador c= new Comprador(id,nombre,apellido,organizacion,correo,clave);
         sc.close();
-        //acuerdate del metodo validar si lees esto Jonathan XDXD
-        c.saveFileComp(nomFile);
-        
+        c.saveFile(nomFile);
+        System.out.println("El comprador se ha registrado con exito");
     }
     public void saveFileComp(String nomFile){
         try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(nomFile),true))){
@@ -112,12 +126,18 @@ public class Comprador extends Usuario {
             System.out.println(e.getMessage());
         }
     }
-    public void hacerOferta(){
+    public static void hacerOferta(){
         ArrayList<Vehiculo> vehiculos= Utilitaria.leerVehiculos("vehiculos.txt");
+        if(vehiculos.isEmpty()){
+            return;
+        }
         ArrayList<Vehiculo> vehiculosFiltrados= buscarVehiculos(vehiculos);
+        if(vehiculosFiltrados.isEmpty()){
+            return;
+        }
         recorrerVehiculos(vehiculosFiltrados);
     }
-    public ArrayList<Vehiculo> buscarVehiculos(ArrayList <Vehiculo> vehiculos){
+    public static ArrayList<Vehiculo> buscarVehiculos(ArrayList <Vehiculo> vehiculos){
         ArrayList<Vehiculo> vehiculos_encontrados= new ArrayList<>();
         Scanner sc= new Scanner(System.in);
         sc.useDelimiter("\n");
@@ -147,7 +167,7 @@ public class Comprador extends Usuario {
         }
         return vehiculos_encontrados;
     }
-    public void recorrerVehiculos(ArrayList<Vehiculo> vehiculos){
+    public static void recorrerVehiculos(ArrayList<Vehiculo> vehiculos){
         int indice=0;
         boolean revisarAnteriorVehiculo=false;
         while(true){
@@ -197,7 +217,7 @@ public class Comprador extends Usuario {
             }
         }
     }
-    public void registrarOferta(Vehiculo v, double precio){
+    public static void registrarOferta(Vehiculo v, double precio){
         try(PrintWriter pw= new PrintWriter(new FileOutputStream(new File("ofertas.txt"),true))){
             pw.println(v.toString()+"|"+precio);
         }

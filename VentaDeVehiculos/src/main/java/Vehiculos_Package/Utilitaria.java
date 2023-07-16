@@ -23,6 +23,7 @@ import java.util.Scanner;
  * @author HP
  */
 public class Utilitaria {
+    /*
     public void menu_principal(){
         Scanner sc= new Scanner(System.in);
         int opcion_selec;
@@ -89,6 +90,7 @@ public class Utilitaria {
         }
         while(opcion_selec!=3);
     }
+*/
     public static int generarID(String nomFile){
         int id=0;
         try(Scanner sc= new Scanner(new File(nomFile))){
@@ -172,6 +174,7 @@ public class Utilitaria {
         }
         catch(Exception e){
             System.out.println(e.getMessage());
+            vehiculos.clear();
         }
         return vehiculos;
     }

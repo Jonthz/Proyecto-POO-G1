@@ -12,7 +12,7 @@ import java.util.Scanner;
  * @author HP
  */
 public class Vendedor extends Usuario {
-
+/*
     private ArrayList<Vehiculo> vehiculos;
 
     public Vendedor(int id, String n, String ap, String org, String correo, String clave) {
@@ -226,5 +226,5 @@ public class Vendedor extends Usuario {
         }
         return null;
     }
-
+*/
 }

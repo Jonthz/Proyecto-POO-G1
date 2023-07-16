@@ -16,6 +16,7 @@ import java.util.Scanner;
  * @author Jonathan
  */
 public class Usuario {
+    /*
     protected int id;
     protected String nombre;
     protected String apellidos;
@@ -49,7 +50,7 @@ public class Usuario {
         
         String[] tokens = correo.split("@");
     }   */
-    
+    /*
     public void registrarUsuario(String nomfile){
         Scanner sc = new Scanner(System.in);
         sc.useDelimiter("\n");
@@ -145,6 +146,6 @@ public class Usuario {
         }
         return Objects.equals(this.clave, other.clave);
     }
-    
+    */
 }
    

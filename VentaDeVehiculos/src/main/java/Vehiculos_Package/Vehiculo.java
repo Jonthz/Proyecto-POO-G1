@@ -163,7 +163,7 @@ public class Vehiculo {
     public static void saveFile(ArrayList<Usuario> usuarios, String nomfile){
         try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(nomfile), true))){
             for(Usuario u: usuarios){
-                pw.println(u.id+"|"+u.nombre+"|"+u.apellidos+"|"+u.organizacion+"|"+u.correo+"|"+u.clave);
+                pw.println(u.id+"|"+u.nombre+"|"+u.apellidos+"|"+u.organizacion+"|"+u.correoElectronico+"|"+u.clave);
             }
         }
         catch(Exception e){

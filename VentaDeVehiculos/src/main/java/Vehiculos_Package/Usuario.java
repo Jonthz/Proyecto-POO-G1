@@ -55,6 +55,19 @@ public class Usuario {
         return true;
         //retorna true si al terminar de recorrer el archivo no encuentra un correo igual
     }
+     public static boolean validarEstructuraCorreO(String correo){
+         int indarroba= correo.lastIndexOf("@");
+         int indpunto= correo.lastIndexOf(".");
+         if(indarroba<=0||indarroba>=correo.length()-1)
+             return false;
+         else if(indpunto<indarroba||indpunto>=correo.length()-1)
+             return false;
+         else if(correo.charAt(indpunto+1)=='.')
+             return false;
+         else{
+             return true;
+         }
+     }
     
     public void saveFile(String nomfile){
         try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(nomfile), true))){
