@@ -4,6 +4,7 @@
  */
 package Vehiculos_Package;
 
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -148,36 +149,8 @@ public class Utilitaria {
             e.printStackTrace();
         }
     }
-    public static ArrayList<Vehiculo> leerVehiculos(String nomFile){
-        ArrayList<Vehiculo> vehiculos= new ArrayList<>();
-        try(Scanner sc= new Scanner(new File(nomFile))){
-            while(sc.hasNextLine()){
-                String linea= sc.nextLine();
-                String [] tokens= linea.split("\\|");
-                TipoVehiculo tipo= TipoVehiculo.valueOf(tokens[1].toUpperCase());
-                Vehiculo v;
-                switch(tipo){
-                    case AUTO:
-                        v= new Auto(Integer.parseInt(tokens[0]),tipo,tokens[2],tokens[3],tokens[4],tokens[5],Integer.parseInt(tokens[6]),Integer.parseInt(tokens[7]),tokens[8],tokens[9],Double.parseDouble(tokens[10]),tokens[11],tokens[12]);
-                        break;
-                    case CAMIONETA:
-                        v= new Camionetas(Integer.parseInt(tokens[0]),tipo,tokens[2],tokens[3],tokens[4],tokens[5],Integer.parseInt(tokens[6]),Integer.parseInt(tokens[7]),tokens[8],tokens[9],Double.parseDouble(tokens[10]),tokens[11],tokens[12],Integer.parseInt(tokens[13]));
-                        break;
-                    case MOTO:
-                        v= new Vehiculo(Integer.parseInt(tokens[0]),tipo,tokens[2],tokens[3],tokens[4],tokens[5],Integer.parseInt(tokens[6]),Integer.parseInt(tokens[7]),tokens[8],tokens[9],Double.parseDouble(tokens[10]));
-                        break;
-                    default:
-                        continue;
-                }
-                vehiculos.add(v);
-            }
-        }
-        catch(Exception e){
-            System.out.println(e.getMessage());
-            vehiculos.clear();
-        }
-        return vehiculos;
-    }
+
+    
     public static int obtenerEntero(Scanner scanner) {
     String input = scanner.nextLine();
     if (input.isEmpty()) {
@@ -206,4 +179,6 @@ public class Utilitaria {
         return null;
         }
     }
+    
+
 }

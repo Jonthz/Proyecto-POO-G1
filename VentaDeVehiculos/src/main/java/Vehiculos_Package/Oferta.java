@@ -21,7 +21,6 @@ public class Oferta {
     private Comprador comprador;
     private int idComprador;
     private int id;
-    private String correoComprador;
     
     public Oferta(int idVehiculo, double precio, int idComprador, int id) {
         this.idVehiculo = idVehiculo;
@@ -118,6 +117,33 @@ public class Oferta {
             }
         }
       return null; 
+    }
+    
+      public static void revisarOfertaActual(int ind, ArrayList<Oferta> ofertas) {
+        if (ind >= 0 && ind < ofertas.size()) {
+            Oferta ofertaActual = ofertas.get(ind);
+            System.out.println("Oferta #" + (ind + 1) + ":");
+            System.out.println("Correo: " + ofertaActual.getComprador().correoElectronico); 
+            System.out.println("Precio ofertado: " + ofertaActual.precio);
+        } else {
+            System.out.println("No hay más ofertas disponibles.");
+        }
+    }
+    public static void avanzarOferta(int ind, ArrayList<Oferta> ofertas) {
+        if (ind < ofertas.size() - 1) {
+            ind++;
+            revisarOfertaActual(ind, ofertas);
+        } else {
+            System.out.println("Ya has revisado todas las ofertas.");
+        }
+    }
+    public static void retrocederOferta(int ind, ArrayList<Oferta> ofertas) {
+        if (ind > 0) {
+            ind--;
+            revisarOfertaActual(ind, ofertas);
+        } else {
+            System.out.println("No puedes retroceder más, es la primera oferta.");
+        }
     }
     
 }

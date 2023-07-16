@@ -12,7 +12,7 @@ import java.util.Scanner;
  * @author HP
  */
 public class Vendedor extends Usuario {
-/*
+
     private ArrayList<Vehiculo> vehiculos;
 
     public Vendedor(int id, String n, String ap, String org, String correo, String clave) {
@@ -75,11 +75,11 @@ public class Vendedor extends Usuario {
     public void setVehiculos(ArrayList<Vehiculo> vehiculos) {
         this.vehiculos = vehiculos;
     }
-    public static void ingresarSistema(String nomfileVehiculo, String nomfileVendedor, String nomfileOferta){
+    public static void aceptarOferta(String nomfileVehiculo, String nomfileVendedor, String nomfileOferta){
         //para que funcione este codigo necesito ya tener actualizado de la lista ofertas en el atributo de vehiculo
         
     ArrayList<Usuario> users = Usuario.readFile(nomfileVendedor);
-    ArrayList<Vehiculo> vehiculos = Vehiculo.readFile(nomfileVehiculo);
+    ArrayList<Vehiculo> vehiculos = Vehiculo.leerVehiculos(nomfileVehiculo);
     Scanner sc = new Scanner(System.in);
     sc.useDelimiter("\n");
     System.out.println("Ingrese su correo");
@@ -94,31 +94,8 @@ public class Vendedor extends Usuario {
         vehiculo.ofertas = Oferta.readFile(nomfileOferta);
         System.out.println(vehiculo.marca + vehiculo.modelo + "Precio: " + vehiculo.precio);
         System.out.println("Se han realizado" + vehiculo.ofertas.size() + "ofertas");
-        String opcion;
-        do {
-            vehiculo.revisarOfertaActual();
-            System.out.println("1. Siguiente Oferta");
-            System.out.println("2. Anterior Oferta");
-            System.out.println("3. Aceptar oferta");
-            System.out.print("Elige una opción: ");
-            opcion = sc.nextLine();
-            
-            switch (opcion) {
-                case "1":
-                    vehiculo.avanzarOferta();
-                    break;
-                case "2":
-                    vehiculo.retrocederOferta();
-                    break;
-                case "3":
-                    System.out.println("¡Hasta luego!");
-                    break;
-                default:
-                    System.out.println("Opción inválida. Inténtalo de nuevo.");
-            }
-            
-            System.out.println();
-        } while (!opcion.equals("3"));
+        Vendedor.recorrerOfertas(vehiculo.ofertas, sc, nomfileVehiculo, vehiculo, vehiculos);
+        
     }
         
     }
@@ -126,7 +103,37 @@ public class Vendedor extends Usuario {
 //        int t_oferta = Oferta.totalOfertasPorVehiculo(ofertas, vehiculo.id);
 //        System.out.println(vehiculo.marca + vehiculo.modelo + "Precio: " + vehiculo.precio);
   
-
+    public static void recorrerOfertas(ArrayList<Oferta> ofertas, Scanner sc, String nomfileVehiculo, Vehiculo vehiculo, ArrayList<Vehiculo> vehiculos){
+        int ind=0;
+        String opcion;
+        do {
+            Oferta.revisarOfertaActual(ind, ofertas);
+            System.out.println("Para avanzar a la siguiente oferta escriba 1");
+            System.out.println("Para retroceder a la anterior oferta escriba 2");
+            System.out.println("Para aceptar la oferta escriba 3");
+            System.out.println("Para cerrar las ofertas escriba 4");
+            System.out.print("Elige una opción: ");
+            opcion = sc.nextLine();
+            
+            switch (opcion) {
+                case "1":
+                    Oferta.avanzarOferta(ind, ofertas);
+                    break;
+                case "2":
+                    Oferta.retrocederOferta(ind, ofertas);
+                    break;
+                case "3":
+                    System.out.println("Oferta aceptada");
+                    Vehiculo.eliminarVehiculo(nomfileVehiculo, vehiculo, vehiculos);
+                    break;
+                default:
+                    System.out.println("Opción inválida. Inténtalo de nuevo.");
+            }
+            
+            System.out.println();
+        } while (!opcion.equals("3") || !opcion.equals("4"));
+    }
+    
     public void ingresarSistema(String nomfileVehiculo, String nomfileVendedor) {
         ArrayList<Usuario> users = Usuario.readFile(nomfileVendedor);
         Scanner sc = new Scanner(System.in);
@@ -226,5 +233,6 @@ public class Vendedor extends Usuario {
         }
         return null;
     }
-*/
+    
+
 }
