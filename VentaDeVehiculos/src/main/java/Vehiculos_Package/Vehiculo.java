@@ -21,8 +21,9 @@ public class Vehiculo {
     protected String tipoCombustible;
     protected double precio;
     protected ArrayList<Oferta>ofertas;
+    public int id;
     
-    public Vehiculo(String placa, String marca, String modelo, String tipoMotor, String anio, String recorrido, String color, String tipoCombustible, double precio) {
+    public Vehiculo(String placa, String marca, String modelo, String tipoMotor, String anio, String recorrido, String color, String tipoCombustible, double precio, int id) {
         this.placa = placa;
         this.marca = marca;
         this.modelo = modelo;
@@ -33,6 +34,7 @@ public class Vehiculo {
         this.tipoCombustible = tipoCombustible;
         this.precio = precio;
         this.ofertas = new ArrayList<>();
+        this.id = id;
     } 
 
     public String getPlaca() {
@@ -107,7 +109,13 @@ public class Vehiculo {
         this.precio = precio;
     }
     
-    public static Vehiculo buscarPorPlaca(ArrayList){
-        
+    public static Vehiculo buscarPorPlaca(ArrayList<Vehiculo> vehiculos, String placa){
+        for(Vehiculo v: vehiculos){
+        if(v.placa.equals(placa)){
+            return v;      
+        }
+        }
+      return null; 
     }
+        
 }

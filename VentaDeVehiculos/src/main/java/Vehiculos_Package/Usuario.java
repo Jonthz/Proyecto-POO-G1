@@ -56,9 +56,9 @@ public class Usuario {
         //retorna true si al terminar de recorrer el archivo no encuentra un correo igual
     }
     
-     public void saveFile(String nomfile){
+    public void saveFile(String nomfile){
         try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(nomfile), true))){
-            pw.println(this.id+"|"+this.nombre+"|"+this.apellidos+"|"+this.organizacion+"|"+this.correo+"|"+this.clave);
+            pw.println(this.id+"|"+this.nombre+"|"+this.apellidos+"|"+this.organizacion+"|"+this.correoElectronico+"|"+this.clave);
         }
         catch(Exception e){
             System.out.println(e.getMessage());
@@ -68,7 +68,7 @@ public class Usuario {
     public static void saveFile(ArrayList<Usuario> usuarios, String nomfile){
         try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(nomfile), true))){
             for(Usuario u: usuarios){
-                pw.println(u.id+"|"+u.nombre+"|"+u.apellidos+"|"+u.organizacion+"|"+u.correo+"|"+u.clave);
+                pw.println(u.id+"|"+u.nombre+"|"+u.apellidos+"|"+u.organizacion+"|"+u.correoElectronico+"|"+u.clave);
             }
         }
         catch(Exception e){

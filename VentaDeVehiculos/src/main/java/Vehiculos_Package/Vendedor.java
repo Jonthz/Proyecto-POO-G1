@@ -69,18 +69,23 @@ public Vendedor(int id, String n,String ap, String org, String correo, String cl
 
 
 
-public static void ingresarSistema(String nomfileVehiculo, String nomfileVendedor){
+public static void ingresarSistema(String nomfileVehiculo, String nomfileVendedor, String nomfileOferta){
     ArrayList<Usuario> users = Usuario.readFile(nomfileVendedor);
+    ArrayList<Vehiculo> vehiculos = Vehiculo.readFile(nomfileVehiculo);
+    ArrayList<Oferta> ofertas = Oferta.readFile(nomfileOferta);
     Scanner sc = new Scanner(System.in);
     sc.useDelimiter("\n");
     System.out.println("Ingrese su correo");
     String correo = sc.nextLine();
     System.out.println("Ingrese su clave");
     String clave = sc.nextLine();
-    Vendedor v = Vendedor.buscarPorCorreo(users, correo);
-    if(v.validarClave(clave)){
+    Vendedor vendedor = Vendedor.buscarPorCorreo(users, correo);
+    if(vendedor.validarClave(clave)){
         System.out.println("Ingrese la placa: ");
-        String placa
+        String placa = sc.nextLine();
+        Vehiculo vehiculo = Vehiculo.buscarPorPlaca(vehiculos, placa);
+        Oferta oferta = Oferta.buscarPorIdVehiculo(ofertas, vehiculo.id);
+        
     }
     else{
         
