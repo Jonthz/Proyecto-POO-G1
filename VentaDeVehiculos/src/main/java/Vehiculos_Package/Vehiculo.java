@@ -27,6 +27,7 @@ public class Vehiculo {
     protected double precio;
     protected ArrayList<Oferta>ofertas;
     protected Vendedor vendedor;
+    protected int ind;
 
     
     public Vehiculo(int id, TipoVehiculo tipo,String placa, String marca, String modelo, String tipoMotor, int anio, int recorrido, String color, String tipoCombustible, double precio) {
@@ -42,6 +43,7 @@ public class Vehiculo {
         this.tipoCombustible = tipoCombustible;
         this.precio = precio;
         this.ofertas = new ArrayList<>();
+        this.ind = 0;
     } 
 
     public int getId() {
@@ -168,6 +170,34 @@ public class Vehiculo {
             System.out.println(e.getMessage());
         }
 
+    }
+ 
+    public void revisarOfertaActual() {
+        if (ind >= 0 && ind < ofertas.size()) {
+            Oferta ofertaActual = ofertas.get(ind);
+            System.out.println("Oferta #" + (ind + 1) + ":");
+            System.out.println("Correo: " + ofertaActual.getComprador().correoElectronico); // Imprimir información de la oferta
+        } else {
+            System.out.println("No hay más ofertas disponibles.");
+        }
+    }
+    
+     public void avanzarOferta() {
+        if (ind < ofertas.size() - 1) {
+            ind++;
+            revisarOfertaActual();
+        } else {
+            System.out.println("Ya has revisado todas las ofertas.");
+        }
+    }
+    
+    public void retrocederOferta() {
+        if (ind > 0) {
+            ind--;
+            revisarOfertaActual();
+        } else {
+            System.out.println("No puedes retroceder más, es la primera oferta.");
+        }
     }
         
 }

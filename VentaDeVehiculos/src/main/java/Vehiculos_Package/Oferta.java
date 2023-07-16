@@ -21,7 +21,8 @@ public class Oferta {
     private Comprador comprador;
     private int idComprador;
     private int id;
-
+    private String correoComprador;
+    
     public Oferta(int idVehiculo, double precio, int idComprador, int id) {
         this.idVehiculo = idVehiculo;
         this.precio = precio;
@@ -118,15 +119,7 @@ public class Oferta {
         }
       return null; 
     }
-    public static int totalOfertasPorVehiculo(ArrayList<Oferta> ofertas, int idVehiculo){
-        int c = 0;
-        for(Oferta  of: ofertas){
-            if(of.idVehiculo == idVehiculo){
-               c +=1; 
-            }
-        }
     
-    }
 }
 
 

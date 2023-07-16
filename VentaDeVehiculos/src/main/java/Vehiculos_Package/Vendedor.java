@@ -76,9 +76,10 @@ public class Vendedor extends Usuario {
         this.vehiculos = vehiculos;
     }
     public static void ingresarSistema(String nomfileVehiculo, String nomfileVendedor, String nomfileOferta){
+        //para que funcione este codigo necesito ya tener actualizado de la lista ofertas en el atributo de vehiculo
+        
     ArrayList<Usuario> users = Usuario.readFile(nomfileVendedor);
     ArrayList<Vehiculo> vehiculos = Vehiculo.readFile(nomfileVehiculo);
-    ArrayList<Oferta> ofertas = Oferta.readFile(nomfileOferta);
     Scanner sc = new Scanner(System.in);
     sc.useDelimiter("\n");
     System.out.println("Ingrese su correo");
@@ -90,11 +91,41 @@ public class Vendedor extends Usuario {
         System.out.println("Ingrese la placa: ");
         String placa = sc.nextLine();
         Vehiculo vehiculo = Vehiculo.buscarPorPlaca(vehiculos, placa);
-        Oferta oferta = Oferta.buscarPorIdVehiculo(ofertas, vehiculo.id);
+        vehiculo.ofertas = Oferta.readFile(nomfileOferta);
+        System.out.println(vehiculo.marca + vehiculo.modelo + "Precio: " + vehiculo.precio);
+        System.out.println("Se han realizado" + vehiculo.ofertas.size() + "ofertas");
+        String opcion;
+        do {
+            vehiculo.revisarOfertaActual();
+            System.out.println("1. Siguiente Oferta");
+            System.out.println("2. Anterior Oferta");
+            System.out.println("3. Aceptar oferta");
+            System.out.print("Elige una opción: ");
+            opcion = sc.nextLine();
+            
+            switch (opcion) {
+                case "1":
+                    vehiculo.avanzarOferta();
+                    break;
+                case "2":
+                    vehiculo.retrocederOferta();
+                    break;
+                case "3":
+                    System.out.println("¡Hasta luego!");
+                    break;
+                default:
+                    System.out.println("Opción inválida. Inténtalo de nuevo.");
+            }
+            
+            System.out.println();
+        } while (!opcion.equals("3"));
     }
+        
     }
-
-    
+//        Oferta oferta = Oferta.buscarPorIdVehiculo(ofertas, vehiculo.id);
+//        int t_oferta = Oferta.totalOfertasPorVehiculo(ofertas, vehiculo.id);
+//        System.out.println(vehiculo.marca + vehiculo.modelo + "Precio: " + vehiculo.precio);
+  
 
     public void ingresarSistema(String nomfileVehiculo, String nomfileVendedor) {
         ArrayList<Usuario> users = Usuario.readFile(nomfileVendedor);
