@@ -126,7 +126,7 @@ public class Comprador extends Usuario {
             System.out.println(e.getMessage());
         }
     }
-    public static void hacerOferta(){
+    public static void hacerOferta(Comprador c){
         ArrayList<Vehiculo> vehiculos= Utilitaria.leerVehiculos("vehiculos.txt");
         if(vehiculos.isEmpty()){
             return;
@@ -135,7 +135,7 @@ public class Comprador extends Usuario {
         if(vehiculosFiltrados.isEmpty()){
             return;
         }
-        recorrerVehiculos(vehiculosFiltrados);
+        recorrerVehiculos(vehiculosFiltrados,c);
     }
     public static ArrayList<Vehiculo> buscarVehiculos(ArrayList <Vehiculo> vehiculos){
         ArrayList<Vehiculo> vehiculos_encontrados= new ArrayList<>();
@@ -165,15 +165,27 @@ public class Comprador extends Usuario {
         if(vehiculos_encontrados.isEmpty()){
             System.out.println("No se ha encontrado ningun vehiculo que coincida con la busqueda");
         }
+        sc.close();
         return vehiculos_encontrados;
     }
-    public static void recorrerVehiculos(ArrayList<Vehiculo> vehiculos){
+    public static void recorrerVehiculos(ArrayList<Vehiculo> vehiculos,Comprador c){
         int indice=0;
         boolean revisarAnteriorVehiculo=false;
         while(true){
             if(!revisarAnteriorVehiculo){
                 System.out.println("Informacion del Vehiculo:");
-                System.out.println(vehiculos.get(indice));
+                Vehiculo v = vehiculos.get(indice);
+                if(v instanceof Auto){
+                    Auto a=(Auto)v;
+                    System.out.println(a.toString());
+                }
+                else if(v instanceof Camionetas){
+                    Camionetas cam=(Camionetas)v;
+                    System.out.println(cam.toString());
+                }
+                else{
+                    System.out.println(v.toString());
+                }
             }
             System.out.println("¿Que desea hacer?");
             System.out.println("Para avanzar al siguiente vehiculo ingrese S");
@@ -210,19 +222,79 @@ public class Comprador extends Usuario {
                 Vehiculo vof= vehiculos.get(indice);
                 System.out.println("Ingrese el precio ofertado: ");
                 double preciof= sc.nextDouble();
-                registrarOferta(vof,preciof);
+                registrarOferta("ofertas.txt",vof,preciof,c);
             }
             else{
                 System.out.println("Intente otra vez");
             }
         }
     }
-    public static void registrarOferta(Vehiculo v, double precio){
+    public static void registrarOferta(String nomFile,Vehiculo v, double precio,Comprador c){
         try(PrintWriter pw= new PrintWriter(new FileOutputStream(new File("ofertas.txt"),true))){
-            pw.println(v.toString()+"|"+precio);
+            int idOfe= Utilitaria.generarID(nomFile);
+            pw.println(idOfe+"+"+v.getId()+"|"+c.getId()+"|"+precio);
         }
         catch(Exception e){
             System.out.println("Erro al registrar la oferta del vehiculo"+e.getMessage());
         }
+    }
+    public static void accederHacerOferta(){
+        Scanner sc= new Scanner(System.in);
+        sc.useDelimiter("\n");
+        System.out.println("Ingrese sus credenciales para acceder a esta funcion: ");
+        boolean acceso= false;
+        do{
+            System.out.println("Ingrese su correo: ");
+            String correo= sc.nextLine();
+            System.out.println("Ingrese su clave: ");
+            String clave= sc.nextLine();
+            String claveHash= Utilitaria.claveHash(clave);
+            acceso= validarCredenciales(correo,claveHash);
+            if(!acceso){
+                System.out.println("Credenciales no validas");
+                System.out.println("Ingrese I si quiere intentar de nuevo, sino ingrese R para registrarse");
+                String opcion= sc.nextLine();
+                opcion=opcion.toUpperCase();
+                if(opcion.equals("R")){
+                    registrarComprador("compradores.txt");
+                    break;
+                }
+            }
+            else{
+                Comprador c= buscarComprador(correo,claveHash,"compradores.txt");
+                hacerOferta(c);
+                break;
+            }
+        }
+        while(true);
+        sc.close();
+    }
+    public static boolean validarCredenciales(String correo, String clave){
+        Comprador c = buscarComprador(correo, clave, "compradores.txt");
+        if(c==null){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+    public static Comprador buscarComprador(String correo, String clave,String nomFile){
+        Comprador compradorEncontrado= null;
+        try(Scanner sc= new Scanner(new File(nomFile))){
+            while(sc.hasNextLine()){
+                String linea= sc.nextLine();
+                String[] tokens=linea.split("\\|");
+                String correoC= tokens[4];
+                String claveC=tokens[5];
+                if(correoC.equals(correo)&& claveC.equals(clave)){
+                    compradorEncontrado= new Comprador(Integer.parseInt(tokens[0]),tokens[1],tokens[2],tokens[3],tokens[4],tokens[5]); 
+                    break;
+                }
+            }
+        }
+        catch(Exception e){
+                System.out.println(e.getMessage());
+        }
+        return compradorEncontrado;
     }
 }
