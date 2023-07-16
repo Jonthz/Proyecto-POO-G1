@@ -4,6 +4,7 @@
  */
 package Vehiculos_Package;
 
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -16,7 +17,10 @@ import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.Scanner;
+import javax.mail.Session;
+
 
 /**
  *
@@ -148,36 +152,8 @@ public class Utilitaria {
             e.printStackTrace();
         }
     }
-    public static ArrayList<Vehiculo> leerVehiculos(String nomFile){
-        ArrayList<Vehiculo> vehiculos= new ArrayList<>();
-        try(Scanner sc= new Scanner(new File(nomFile))){
-            while(sc.hasNextLine()){
-                String linea= sc.nextLine();
-                String [] tokens= linea.split("\\|");
-                TipoVehiculo tipo= TipoVehiculo.valueOf(tokens[1].toUpperCase());
-                Vehiculo v;
-                switch(tipo){
-                    case AUTO:
-                        v= new Auto(Integer.parseInt(tokens[0]),tipo,tokens[2],tokens[3],tokens[4],tokens[5],Integer.parseInt(tokens[6]),Integer.parseInt(tokens[7]),tokens[8],tokens[9],Double.parseDouble(tokens[10]),tokens[11],tokens[12]);
-                        break;
-                    case CAMIONETA:
-                        v= new Camionetas(Integer.parseInt(tokens[0]),tipo,tokens[2],tokens[3],tokens[4],tokens[5],Integer.parseInt(tokens[6]),Integer.parseInt(tokens[7]),tokens[8],tokens[9],Double.parseDouble(tokens[10]),tokens[11],tokens[12],Integer.parseInt(tokens[13]));
-                        break;
-                    case MOTO:
-                        v= new Vehiculo(Integer.parseInt(tokens[0]),tipo,tokens[2],tokens[3],tokens[4],tokens[5],Integer.parseInt(tokens[6]),Integer.parseInt(tokens[7]),tokens[8],tokens[9],Double.parseDouble(tokens[10]));
-                        break;
-                    default:
-                        continue;
-                }
-                vehiculos.add(v);
-            }
-        }
-        catch(Exception e){
-            System.out.println(e.getMessage());
-            vehiculos.clear();
-        }
-        return vehiculos;
-    }
+
+    
     public static int obtenerEntero(Scanner scanner) {
     String input = scanner.nextLine();
     if (input.isEmpty()) {
@@ -206,4 +182,37 @@ public class Utilitaria {
         return null;
         }
     }
+    
+    private static void enviarConGMail(String destinatario, String asunto, String cuerpo) {
+    //La dirección de correo de envío
+    String remitente = "proyectojavap1@gmail.com";
+    //La clave de aplicación obtenida según se explica en este artículo:
+    String claveemail = "ehaktnuqninlkdto";
+
+    Properties props = System.getProperties();
+    props.put("mail.smtp.host", "smtp.gmail.com");  //El servidor SMTP de Google
+    props.put("mail.smtp.user", remitente);
+    props.put("mail.smtp.clave", claveemail);    //La clave de la cuenta
+    props.put("mail.smtp.auth", "true");    //Usar autenticación mediante usuario y clave
+    props.put("mail.smtp.starttls.enable", "true"); //Para conectar de manera segura al servidor SMTP
+    props.put("mail.smtp.port", "587"); //El puerto SMTP seguro de Google
+
+    Session session = Session.getDefaultInstance(props);
+    MimeMessage message = new MimeMessage(session);
+
+    try {
+        message.setFrom(new InternetAddress(remitente));
+        message.addRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));   //Se podrían añadir varios de la misma manera
+        message.setSubject(asunto);
+        message.setText(cuerpo);
+        Transport transport = session.getTransport("smtp");
+        transport.connect("smtp.gmail.com", remitente, claveemail);
+        transport.sendMessage(message, message.getAllRecipients());
+        transport.close();
+    }
+    catch (MessagingException me) {
+        me.printStackTrace();   //Si se produce un error
+    }
+  }
+
 }

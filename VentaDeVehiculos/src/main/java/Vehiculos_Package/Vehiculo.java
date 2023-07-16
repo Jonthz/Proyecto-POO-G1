@@ -4,6 +4,9 @@
  */
 package Vehiculos_Package;
 
+import static Vehiculos_Package.TipoVehiculo.AUTO;
+import static Vehiculos_Package.TipoVehiculo.CAMIONETA;
+import static Vehiculos_Package.TipoVehiculo.MOTO;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
@@ -28,7 +31,7 @@ public class Vehiculo {
     protected double precio;
     protected ArrayList<Oferta>ofertas;
     protected Vendedor vendedor;
-    protected int ind;
+    
 
     
     public Vehiculo(int id, TipoVehiculo tipo,String placa, String marca, String modelo, String tipoMotor, int anio, int recorrido, String color, String tipoCombustible, double precio) {
@@ -44,7 +47,7 @@ public class Vehiculo {
         this.tipoCombustible = tipoCombustible;
         this.precio = precio;
         this.ofertas = new ArrayList<>();
-        this.ind = 0;
+        
     } 
 
     public int getId() {
@@ -155,8 +158,8 @@ public class Vehiculo {
 
     public void saveFile(String nomfile){
        try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(nomfile), true))){
-
-            pw.println(this.placa+"|"+this.marca+"|"+this.modelo+"|"+this.tipoMotor+"|"+this.anio+"|"+this.recorrido+"|"+this.color+"|"+this.tipoCombustible+"|"+this.precio+"|"+this.ofertas);
+           //(int id, TipoVehiculo tipo,String placa, String marca, String modelo, String tipoMotor, int anio, int recorrido, String color, String tipoCombustible, double precio)
+            pw.println(this.id+"|"+this.tipo+"|"+this.placa+"|"+this.marca+"|"+this.modelo+"|"+this.tipoMotor+"|"+this.anio+"|"+this.recorrido+"|"+this.color+"|"+this.tipoCombustible+"|"+this.precio);
        }
        catch(Exception e){
            System.out.println(e.getMessage());
@@ -164,45 +167,70 @@ public class Vehiculo {
     }
 
     // si quiero guardar toda la info a partir de un archivo o una lista
-    public static void saveFile(ArrayList<Usuario> usuarios, String nomfile){
+    public static void saveFile(ArrayList<Vehiculo> vehiculos, String nomfile){
         try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(nomfile), true))){
-            for(Usuario u: usuarios){
-                pw.println(u.id+"|"+u.nombre+"|"+u.apellidos+"|"+u.organizacion+"|"+u.correoElectronico+"|"+u.clave);
+            for(Vehiculo v: vehiculos){
+                TipoVehiculo tipo = v.tipo;
+                switch(tipo){
+                    case AUTO:
+                        Auto a = (Auto)v;
+                        pw.println(a.id+"|"+a.tipo+"|"+a.placa+"|"+a.marca+"|"+a.modelo+"|"+a.tipoMotor+"|"+a.anio+"|"+a.recorrido+"|"+a.color+"|"+a.tipoCombustible+"|"+a.precio+"|"+a.getVidrios()+"|"+a.getTransmision());
+                        break;
+                    case CAMIONETA:
+                        Camionetas c = (Camionetas)v;
+                        pw.println(c.id+"|"+c.tipo+"|"+c.placa+"|"+c.marca+"|"+c.modelo+"|"+c.tipoMotor+"|"+c.anio+"|"+c.recorrido+"|"+c.color+"|"+c.tipoCombustible+"|"+c.precio+"|"+c.getVidrios()+"|"+c.getTransmision()+"|"+c.getTraccion());
+                        break;
+                    case MOTO:
+                        pw.println(v.id+"|"+v.tipo+"|"+v.placa+"|"+v.marca+"|"+v.modelo+"|"+v.tipoMotor+"|"+v.anio+"|"+v.recorrido+"|"+v.color+"|"+v.tipoCombustible+"|"+v.precio);
+                        break;
+                    default:
+                }
             }
         }
         catch(Exception e){
             System.out.println(e.getMessage());
         }
-
-    }
- 
-    public void revisarOfertaActual() {
-        if (ind >= 0 && ind < ofertas.size()) {
-            Oferta ofertaActual = ofertas.get(ind);
-            System.out.println("Oferta #" + (ind + 1) + ":");
-            System.out.println("Correo: " + ofertaActual.getComprador().correoElectronico); // Imprimir información de la oferta
-        } else {
-            System.out.println("No hay más ofertas disponibles.");
-        }
     }
     
-     public void avanzarOferta() {
-        if (ind < ofertas.size() - 1) {
-            ind++;
-            revisarOfertaActual();
-        } else {
-            System.out.println("Ya has revisado todas las ofertas.");
-        }
-    }
     
-    public void retrocederOferta() {
-        if (ind > 0) {
-            ind--;
-            revisarOfertaActual();
-        } else {
-            System.out.println("No puedes retroceder más, es la primera oferta.");
+        public static ArrayList<Vehiculo> leerVehiculos(String nomFile){
+        ArrayList<Vehiculo> vehiculos= new ArrayList<>();
+        try(Scanner sc= new Scanner(new File(nomFile))){
+            while(sc.hasNextLine()){
+                String linea= sc.nextLine();
+                String [] tokens= linea.split("\\|");
+                TipoVehiculo tipo= TipoVehiculo.valueOf(tokens[1].toUpperCase());
+                Vehiculo v;
+                switch(tipo){
+                    case AUTO:
+                        v= new Auto(Integer.parseInt(tokens[0]),tipo,tokens[2],tokens[3],tokens[4],tokens[5],Integer.parseInt(tokens[6]),Integer.parseInt(tokens[7]),tokens[8],tokens[9],Double.parseDouble(tokens[10]),tokens[11],tokens[12]);
+                        break;
+                    case CAMIONETA:
+                        v= new Camionetas(Integer.parseInt(tokens[0]),tipo,tokens[2],tokens[3],tokens[4],tokens[5],Integer.parseInt(tokens[6]),Integer.parseInt(tokens[7]),tokens[8],tokens[9],Double.parseDouble(tokens[10]),tokens[11],tokens[12],Integer.parseInt(tokens[13]));
+                        break;
+                    case MOTO:
+                        v= new Vehiculo(Integer.parseInt(tokens[0]),tipo,tokens[2],tokens[3],tokens[4],tokens[5],Integer.parseInt(tokens[6]),Integer.parseInt(tokens[7]),tokens[8],tokens[9],Double.parseDouble(tokens[10]));
+                        break;
+                    default:
+                        continue;
+                }
+                vehiculos.add(v);
+            }
         }
-    }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+            vehiculos.clear();
+        }
+        return vehiculos;
+        }
+    
+        public static void eliminarVehiculo(String nomfile, Vehiculo vehiculo, ArrayList<Vehiculo> vehiculos){
+            vehiculos.remove(vehiculo);
+            Utilitaria.vaciarArchivo(nomfile);
+            Vehiculo.saveFile(vehiculos, nomfile);
+            
+        }
+    
      
     @Override
     public String toString() {
