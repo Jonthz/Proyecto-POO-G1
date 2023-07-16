@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  *
@@ -24,8 +25,8 @@ public class Vehiculo {
     protected String tipoCombustible;
     protected double precio;
     protected ArrayList<Oferta>ofertas;
-    
-    public Vehiculo(String placa, String marca, String modelo, String tipoMotor, String anio, String recorrido, String color, String tipoCombustible, double precio) {
+   
+    public Vehiculo(String placa, String marca, String modelo, String tipoMotor, String anio, String recorrido, String color, String tipoCombustible, double precio, ArrayList<Oferta> ofertas) {
         this.placa = placa;
         this.marca = marca;
         this.modelo = modelo;
@@ -110,23 +111,20 @@ public class Vehiculo {
         this.precio = precio;
     }
     
-     public void saveFile(String nomfile){
-        try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(nomfile), true))){
+    public void saveFile(String nomfile){
+       try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(nomfile), true))){
             pw.println(this.placa+"|"+this.marca+"|"+this.modelo+"|"+this.tipoMotor+"|"+this.anio+"|"+this.recorrido+"|"+this.color+"|"+this.tipoCombustible+"|"+this.precio+"|"+this.ofertas);
-        }
-        catch(Exception e){
-            System.out.println(e.getMessage());
-        }
+       }
+       catch(Exception e){
+           System.out.println(e.getMessage());
+       }
     }
-    // si quiero guardar toda la info a partir de un archivo o una lista
-    public static void saveFile(ArrayList<Usuario> usuarios, String nomfile){
-        try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(nomfile), true))){
-            for(Usuario u: usuarios){
-                pw.println(u.id+"|"+u.nombre+"|"+u.apellidos+"|"+u.organizacion+"|"+u.correo+"|"+u.clave);
-            }
-        }
-        catch(Exception e){
-            System.out.println(e.getMessage());
-        }
+     
+     
+    @Override
+    public String toString() {
+        return "placa: " + placa + "\nMarca: " + marca + "\nModelo: " + modelo + "\nTipo motor: " + tipoMotor + "\nAño: " + anio + "\nRecorrido: " + recorrido + "\nColor: " + color + "\nTipo combustible: " + tipoCombustible + "\nprecio: " + precio ;
+    
     }
+
 }
