@@ -27,7 +27,6 @@ import javax.mail.Transport;
 import javax.mail.MessagingException;
 
 
-
 /**
  *
  * @author HP
@@ -188,6 +187,7 @@ public class Utilitaria {
         return null;
         }
     }
+
     
     public static void enviarConGMail(String destinatario, String asunto, String cuerpo) {
     //La dirección de correo de envío
@@ -220,5 +220,5 @@ public class Utilitaria {
         me.printStackTrace();   //Si se produce un error
     }
   }
-
+    
 }

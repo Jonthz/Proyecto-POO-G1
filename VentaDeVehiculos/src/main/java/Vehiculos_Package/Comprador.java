@@ -127,7 +127,7 @@ public class Comprador extends Usuario {
         }
     }
     public static void hacerOferta(Comprador c){
-        ArrayList<Vehiculo> vehiculos= Utilitaria.leerVehiculos("vehiculos.txt");
+        ArrayList<Vehiculo> vehiculos= Vehiculo.leerVehiculos("vehiculos.txt");
         if(vehiculos.isEmpty()){
             return;
         }
