@@ -32,8 +32,7 @@ import javax.mail.MessagingException;
  * @author HP
  */
 public class Utilitaria {
-    /*
-    public void menu_principal(){
+    public  void menu_principal(){
         Scanner sc= new Scanner(System.in);
         int opcion_selec;
         do{
@@ -56,7 +55,6 @@ public class Utilitaria {
         while(opcion_selec!=3);
     }
     public void menu_vendedor(){
-        Vendedor v= new Vendedor();
         Scanner sc= new Scanner(System.in);
         int opcion_selec;
         do{
@@ -67,9 +65,9 @@ public class Utilitaria {
             System.out.println("4. Regresar");
             opcion_selec=sc.nextInt();
             switch(opcion_selec){
-                case 1 -> Vendedor.registrarVendedor();
-                case 2 -> Vendedor.registrarVehiculo();
-                case 3 -> Vendedor.aceptarOferta();
+                case 1 -> Usuario.registrarUsuario("vendedores.txt");
+                case 2 -> Vendedor.ingresarSistema("vehiculos.txt","vendedores.txt");
+                case 3 -> Vendedor.aceptarOferta("vehiculos.txt","vendedores.txt","ofertas.txt");
                 case 4 -> {
                 }
                 default -> System.out.println("Opcion invalida. Intente de nuevo");
@@ -90,7 +88,7 @@ public class Utilitaria {
             opcion_selec=sc.nextInt();
             switch(opcion_selec){
                 case 1 -> Comprador.registrarComprador("compradores.txt");
-                case 2 -> c.hacerOferta();
+                case 2 -> Comprador.accederHacerOferta();
                 case 3 ->{
                 }
                 default -> System.out.println("Opcion invalida. Intente de nuevo");
@@ -99,7 +97,7 @@ public class Utilitaria {
         }
         while(opcion_selec!=3);
     }
-*/
+
     public static int generarID(String nomFile){
         int id=0;
         try(Scanner sc= new Scanner(new File(nomFile))){
@@ -162,7 +160,7 @@ public class Utilitaria {
     public static int obtenerEntero(Scanner scanner) {
     String input = scanner.nextLine();
     if (input.isEmpty()) {
-        return Integer.MIN_VALUE;
+        return 0;
         }
     else{
         return Integer.parseInt(input);
@@ -172,7 +170,7 @@ public class Utilitaria {
     public static double obtenerDouble(Scanner scanner) {
     String input = scanner.nextLine();
     if (input.isEmpty()) {
-        return Double.MIN_VALUE;
+        return 0;
         }
     else{
         return Double.parseDouble(input);

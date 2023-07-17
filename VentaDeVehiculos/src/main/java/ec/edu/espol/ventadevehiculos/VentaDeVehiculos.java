@@ -16,9 +16,8 @@ import Vehiculos_Package.Vendedor;
 public class VentaDeVehiculos {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
-        //Utilitaria.vaciarArchivo("compradores.txt");
-        Vendedor.ingresarSistema("vehiculos.txt","vendedores.txt");
+        Utilitaria u = new Utilitaria();
+        u.menu_principal();
     }
     
 }
