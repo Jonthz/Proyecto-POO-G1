@@ -294,7 +294,7 @@ public class Comprador extends Usuario {
                 String opcion= sc.nextLine();
                 opcion=opcion.toUpperCase();
                 if(opcion.equals("R")){
-                    registrarComprador("compradores.txt");
+                    Usuario.registrarUsuario("compradores.txt");
                     break;
                 }
             }

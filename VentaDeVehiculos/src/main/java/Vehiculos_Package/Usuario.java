@@ -103,7 +103,7 @@ public class Usuario {
         }
         return usuarios;
     }
-     public void registrarUsuario(String nomfile){
+    public static void registrarUsuario(String nomfile){
         Scanner sc = new Scanner(System.in);
         sc.useDelimiter("\n");
         System.out.println("Ingrese sus siguentes datos");
@@ -113,18 +113,31 @@ public class Usuario {
         String apellido=sc.nextLine();
         System.out.println("Correo: ");
         String correo= sc.nextLine();
-        if(Usuario.validarCorreoUnico(correo, nomfile)){
-            System.out.println("Correo valido");
-            System.out.println("Organización: ");
-            String organizacion=sc.nextLine();
-            System.out.println("Clave: ");
-            String clave= sc.nextLine();
-            int id = Utilitaria.generarID(nomfile);
-            Usuario u = new Usuario(id, nombre,apellido,organizacion,correo,clave);
-            u.saveFile(nomfile);
-        }
+        while(true){
+        if(validarEstructuraCorreO(correo)){
+          if(validarCorreoUnico(correo, nomfile)){
+            break;
+            }
+          else{
+            System.out.println("El correo ingresado ya se encuentra registrado. Intente de nuevo");
+            correo=sc.nextLine();
+            }  
+           }
         else{
-            System.out.println("Este correo ya se encuentra registrado");
+            System.out.println("Se ha ingresado un correo no valido");
+            correo=sc.nextLine();
+           }
         }
+        System.out.println("Correo valido");
+        System.out.println("Organización: ");
+        String organizacion=sc.nextLine();
+        System.out.println("Clave: ");
+        String clave= sc.nextLine();
+        clave=Utilitaria.claveHash(clave);
+        int id = Utilitaria.generarID(nomfile);
+        Usuario u = new Usuario(id, nombre,apellido,organizacion,correo,clave);
+        sc.close();
+        u.saveFile(nomfile);
+        System.out.println("Se ha registrado con exito");
     }
 }
