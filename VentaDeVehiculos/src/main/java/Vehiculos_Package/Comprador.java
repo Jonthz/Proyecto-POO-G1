@@ -335,4 +335,65 @@ public class Comprador extends Usuario {
         }
         return compradorEncontrado;
     }
+        public static void saveFile(ArrayList<Comprador> usuarios, String nomfile){
+        try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(nomfile), true))){
+            for(Comprador u: usuarios){
+                pw.println(u.id+"|"+u.nombre+"|"+u.apellidos+"|"+u.organizacion+"|"+u.correoElectronico+"|"+u.clave);
+            }
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+    public static ArrayList<Comprador> readFile(String nomfile){
+        ArrayList<Comprador> comprador = new ArrayList<>();
+        try(Scanner sc = new Scanner(new File(nomfile))){
+           while(sc.hasNextLine()){
+               String linea = sc.nextLine();
+               String[] s = linea.split("\\|");
+               Comprador c = new Comprador(Integer.parseInt(s[0]), s[1], s[2], s[3], s[4], s[5]);
+               comprador.add(c);
+           }
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return comprador;
+    }
+        public void registrarUsuario(String nomfile){
+        Scanner sc = new Scanner(System.in);
+        sc.useDelimiter("\n");
+        System.out.println("Ingrese sus siguentes datos");
+        System.out.println("Nombre: ");
+        String nombre=sc.nextLine();
+        System.out.println("Apellido:");
+        String apellido=sc.nextLine();
+        System.out.println("Correo: ");
+        String correo= sc.nextLine();
+        if(Usuario.validarCorreoUnico(correo, nomfile)){
+            System.out.println("Correo valido");
+            System.out.println("Organización: ");
+            String organizacion=sc.nextLine();
+            System.out.println("Clave: ");
+            String clave= sc.nextLine();
+            int id = Utilitaria.generarID(nomfile);
+            Comprador u = new Comprador(id, nombre,apellido,organizacion,correo,clave);
+            u.saveFile(nomfile);
+        }
+        else{
+            System.out.println("Este correo ya se encuentra registrado");
+        }
+    }
+//       public static boolean validarCorreoUnico(String correo, String nomfile){
+//        ArrayList<Comprador> comprador = Comprador.readFile(nomfile);
+//        for(Usuario u: comprador){
+//            if(u.correoElectronico.equalsIgnoreCase( correo))
+//            {
+//                return false;
+//                //retorna false cuando encuentre un correo igual al ingresado por el usuario
+//            }
+//        }
+//        return true;
+//        //retorna true si al terminar de recorrer el archivo no encuentra un correo igual
+//    }
 }

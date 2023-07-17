@@ -4,6 +4,9 @@
  */
 package Vehiculos_Package;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -76,9 +79,8 @@ public class Vendedor extends Usuario {
         this.vehiculos = vehiculos;
     }
     public static void aceptarOferta(String nomfileVehiculo, String nomfileVendedor, String nomfileOferta){
-        //para que funcione este codigo necesito ya tener actualizado de la lista ofertas en el atributo de vehiculo
         
-    ArrayList<Usuario> users = Usuario.readFile(nomfileVendedor);
+    ArrayList<Vendedor> users = Vendedor.readFile(nomfileVendedor);
     ArrayList<Vehiculo> vehiculos = Vehiculo.leerVehiculos(nomfileVehiculo);
     Scanner sc = new Scanner(System.in);
     sc.useDelimiter("\n");
@@ -137,7 +139,7 @@ public class Vendedor extends Usuario {
     }
     
     public void ingresarSistema(String nomfileVehiculo, String nomfileVendedor) {
-        ArrayList<Usuario> users = Usuario.readFile(nomfileVendedor);
+        ArrayList<Vendedor> users = Vendedor.readFile(nomfileVendedor);
         Scanner sc = new Scanner(System.in);
         sc.useDelimiter("\n");
         System.out.println("Ingrese su correo");
@@ -193,7 +195,7 @@ public class Vendedor extends Usuario {
         sc2.nextLine();
         double precio_V;
         int id = Utilitaria.generarID(nomfile);
-        if (tipo_vehiculo.equals("Auto") || tipo_vehiculo.equals("Camioneta")) {
+        if (tipo_vehiculo.equalsIgnoreCase("Auto") || tipo_vehiculo.equalsIgnoreCase("Camioneta")) {
             System.out.println("Ingrese vidrio del vehiculo: ");
             String vidrio = sc2.nextLine();
             sc2.nextLine();
@@ -206,10 +208,10 @@ public class Vendedor extends Usuario {
             System.out.println("Ingrese el precio del Vehiculo: ");
             precio_V = sc2.nextDouble();
             
-            if (tipo_vehiculo.equals("Auto")) {
+            if (tipo_vehiculo.equalsIgnoreCase("Auto")) {
                 Auto auto_add = new Auto(id, TipoVehiculo.AUTO, placa, marca, modelo, tipoMotor, anioVehiculo, recorrido, color, tipoCombustible, precio_V, vidrio, transmision);
                 vehiculos.add(auto_add);
-            }else if(tipo_vehiculo.equals("Camioneta")){
+            }else if(tipo_vehiculo.equalsIgnoreCase("Camioneta")){
                 Camionetas cam_add = new Camionetas(id, TipoVehiculo.CAMIONETA, placa, marca, modelo, tipoMotor, anioVehiculo, recorrido, color, tipoCombustible, precio_V, vidrio, transmision, traccion);
                 //int id, TipoVehiculo tipo,String placa, String marca, String modelo, String tipoMotor, int anio, int recorrido, String color, String tipoCombustible, double precio,String vidrios, String transmision, int traccion)
                 vehiculos.add(cam_add);
@@ -227,13 +229,76 @@ public class Vendedor extends Usuario {
         return this.clave.equals(clave_h);
     }
 
-    public static Vendedor buscarPorCorreo(ArrayList<Usuario> users, String correo) {
-        for (Usuario u : users) {
+    public static Vendedor buscarPorCorreo(ArrayList<Vendedor> users, String correo) {
+        for (Vendedor u : users) {
             if (u.correoElectronico.equals(correo)) {
-                return (Vendedor) u;
+                return u;
             }
         }
         return null;
     }
+    public static void saveFile(ArrayList<Vendedor> usuarios, String nomfile){
+        try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(nomfile), true))){
+            for(Vendedor u: usuarios){
+                pw.println(u.id+"|"+u.nombre+"|"+u.apellidos+"|"+u.organizacion+"|"+u.correoElectronico+"|"+u.clave);
+            }
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
 
+    
+     public static ArrayList<Vendedor> readFile(String nomfile){
+        ArrayList<Vendedor> vendedor = new ArrayList<>();
+        try(Scanner sc = new Scanner(new File(nomfile))){
+           while(sc.hasNextLine()){
+               String linea = sc.nextLine();
+               String[] s = linea.split("\\|");
+               Vendedor v = new Vendedor(Integer.parseInt(s[0]), s[1], s[2], s[3], s[4], s[5]);
+               vendedor.add(v);
+           }
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return vendedor;
+     }
+      public void registrarUsuario(String nomfile){
+        Scanner sc = new Scanner(System.in);
+        sc.useDelimiter("\n");
+        System.out.println("Ingrese sus siguentes datos");
+        System.out.println("Nombre: ");
+        String nombre=sc.nextLine();
+        System.out.println("Apellido:");
+        String apellido=sc.nextLine();
+        System.out.println("Correo: ");
+        String correo= sc.nextLine();
+        if(Comprador.validarCorreoUnico(correo, nomfile)){
+            System.out.println("Correo valido");
+            System.out.println("Organización: ");
+            String organizacion=sc.nextLine();
+            System.out.println("Clave: ");
+            String clave= sc.nextLine();
+            int id = Utilitaria.generarID(nomfile);
+            Comprador u = new Comprador(id, nombre,apellido,organizacion,correo,clave);
+            u.saveFile(nomfile);
+        }
+        else{
+            System.out.println("Este correo ya se encuentra registrado");
+        }
+    }
+//       public static boolean validarCorreoUnico(String correo, String nomfile){
+//        ArrayList<Vendedor> vendedor = Vendedor.readFile(nomfile);
+//        for(Usuario u: comprador){
+//            if(u.correoElectronico.equalsIgnoreCase( correo))
+//            {
+//                return false;
+//                //retorna false cuando encuentre un correo igual al ingresado por el usuario
+//            }
+//        }
+//        return true;
+//        //retorna true si al terminar de recorrer el archivo no encuentra un correo igual
+//    }
 }
+     

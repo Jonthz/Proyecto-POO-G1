@@ -4,9 +4,10 @@
 
 package ec.edu.espol.ventadevehiculos;
 
-import Vehiculos_Package.Comprador;
+import Vehiculos_Package.*;
 import Vehiculos_Package.Utilitaria;
 import ec.edu.espol.ventadevehiculos.clases.Usuario;
+import java.util.ArrayList;
 
 /**
  *
@@ -17,7 +18,11 @@ public class VentaDeVehiculos {
     public static void main(String[] args) {
         System.out.println("Hello World!");
         //Utilitaria.vaciarArchivo("compradores.txt");
-        Usuario.registrarUsuario("compradores.txt");
+        ArrayList<Vendedor> u = Vendedor.readFile("vendedores.txt");
+        Vendedor.saveFile(u, "vendores.txt");
+        sad
+        u.get(0);
+        
     }
     
 }
