@@ -19,9 +19,13 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Scanner;
-/*
 import javax.mail.Session;
-*/
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.InternetAddress;
+import javax.mail.Message;
+import javax.mail.Transport;
+import javax.mail.MessagingException;
+
 
 /**
  *
@@ -183,8 +187,9 @@ public class Utilitaria {
         return null;
         }
     }
-    /*
-    private static void enviarConGMail(String destinatario, String asunto, String cuerpo) {
+
+    
+    public static void enviarConGMail(String destinatario, String asunto, String cuerpo) {
     //La dirección de correo de envío
     String remitente = "proyectojavap1@gmail.com";
     //La clave de aplicación obtenida según se explica en este artículo:
@@ -215,5 +220,5 @@ public class Utilitaria {
         me.printStackTrace();   //Si se produce un error
     }
   }
-    */
+    
 }

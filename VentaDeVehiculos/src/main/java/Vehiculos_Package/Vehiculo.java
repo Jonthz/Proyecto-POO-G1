@@ -232,7 +232,16 @@ public class Vehiculo {
             
         }
     
-     
+        public static ArrayList<Oferta> rellenarOfertasVehiculo(String nomfile, Vehiculo vehiculo){
+            ArrayList<Oferta> ofertas = Oferta.readFile(nomfile);
+            ArrayList<Oferta> vOf = new ArrayList<>();
+            for(Oferta of: ofertas){
+                if(of.getIdVehiculo() == vehiculo.id)
+                    vOf.add(of);
+                
+            }
+            return vOf;
+        }
     @Override
     public String toString() {
         return "placa: " + placa + "\nMarca: " + marca + "\nModelo: " + modelo + "\nTipo motor: " + tipoMotor + "\nAño: " + anio + "\nRecorrido: " + recorrido + "\nColor: " + color + "\nTipo combustible: " + tipoCombustible + "\nprecio: " + precio ;
