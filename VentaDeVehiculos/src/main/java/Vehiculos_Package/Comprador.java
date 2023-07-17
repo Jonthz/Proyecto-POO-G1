@@ -1,3 +1,4 @@
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -133,6 +134,7 @@ public class Comprador extends Usuario {
         }
         ArrayList<Vehiculo> vehiculosFiltrados= buscarVehiculos(vehiculos);
         if(vehiculosFiltrados.isEmpty()){
+            System.out.println("hola");
             return;
         }
         recorrerVehiculos(vehiculosFiltrados,c);
@@ -171,6 +173,8 @@ public class Comprador extends Usuario {
     public static void recorrerVehiculos(ArrayList<Vehiculo> vehiculos,Comprador c){
         int indice=0;
         boolean revisarAnteriorVehiculo=false;
+        Scanner sc= new Scanner(System.in);
+        sc.useDelimiter("\n");
         while(true){
             if(!revisarAnteriorVehiculo){
                 System.out.println("Informacion del Vehiculo:");
@@ -192,8 +196,7 @@ public class Comprador extends Usuario {
             System.out.println("Para retroceder al anterior vehiculo ingrese A");
             System.out.println("Para terminar con la busqueda ingrese T");
             System.out.println("Para ofertar por un vehiculo ingrese O");
-            Scanner sc= new Scanner(System.in);
-            sc.useDelimiter("\n");
+            sc.nextLine();
             String opcion = sc.nextLine();
             if(opcion.equalsIgnoreCase("S")){
                 if(!revisarAnteriorVehiculo){
@@ -228,6 +231,7 @@ public class Comprador extends Usuario {
                 System.out.println("Intente otra vez");
             }
         }
+        sc.close();
     }
     public static void registrarOferta(String nomFile,Vehiculo v, double precio,Comprador c){
         try(PrintWriter pw= new PrintWriter(new FileOutputStream(new File("ofertas.txt"),true))){
@@ -335,6 +339,5 @@ public class Comprador extends Usuario {
         }
         return compradorEncontrado;
     }
-
-//    }
 }
+

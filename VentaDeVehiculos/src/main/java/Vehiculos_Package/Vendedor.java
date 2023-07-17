@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
 
 import java.util.Scanner;
@@ -218,6 +219,7 @@ public class Vendedor extends Usuario {
     public static void ingresarVehiculo(String tipo_vehiculo,String nomfile,Vendedor v) {
         Scanner sc2 = new Scanner(System.in);
         sc2.useDelimiter("\n");
+        sc2.useLocale(Locale.US);
         System.out.print("Ingrese la placa: ");
         String placa = sc2.nextLine();
         boolean placaE= Vehiculo.buscarPlaca(nomfile, placa);

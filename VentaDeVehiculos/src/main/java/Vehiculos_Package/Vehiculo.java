@@ -200,17 +200,17 @@ public class Vehiculo {
             while(sc.hasNextLine()){
                 String linea= sc.nextLine();
                 String [] tokens= linea.split("\\|");
-                TipoVehiculo tipo= TipoVehiculo.valueOf(tokens[1].toUpperCase());
+                TipoVehiculo tipo= TipoVehiculo.valueOf(tokens[2].toUpperCase());
                 Vehiculo v;
                 switch(tipo){
                     case AUTO:
-                        v= new Auto(Integer.parseInt(tokens[0]),tipo,tokens[2],tokens[3],tokens[4],tokens[5],Integer.parseInt(tokens[6]),Integer.parseInt(tokens[7]),tokens[8],tokens[9],Double.parseDouble(tokens[10]),tokens[11],tokens[12]);
+                        v= new Auto(Integer.parseInt(tokens[1]),tipo,tokens[3],tokens[4],tokens[5],tokens[6],Integer.parseInt(tokens[7]),Integer.parseInt(tokens[8]),tokens[9],tokens[10],Double.parseDouble(tokens[11]),tokens[12],tokens[13]);
                         break;
                     case CAMIONETA:
-                        v= new Camionetas(Integer.parseInt(tokens[0]),tipo,tokens[2],tokens[3],tokens[4],tokens[5],Integer.parseInt(tokens[6]),Integer.parseInt(tokens[7]),tokens[8],tokens[9],Double.parseDouble(tokens[10]),tokens[11],tokens[12],Integer.parseInt(tokens[13]));
+                        v= new Camionetas(Integer.parseInt(tokens[1]),tipo,tokens[3],tokens[4],tokens[5],tokens[6],Integer.parseInt(tokens[7]),Integer.parseInt(tokens[8]),tokens[9],tokens[10],Double.parseDouble(tokens[11]),tokens[12],tokens[13],Integer.parseInt(tokens[14]));
                         break;
                     case MOTO:
-                        v= new Vehiculo(Integer.parseInt(tokens[0]),tipo,tokens[2],tokens[3],tokens[4],tokens[5],Integer.parseInt(tokens[6]),Integer.parseInt(tokens[7]),tokens[8],tokens[9],Double.parseDouble(tokens[10]));
+                        v= new Vehiculo(Integer.parseInt(tokens[1]),tipo,tokens[3],tokens[4],tokens[5],tokens[6],Integer.parseInt(tokens[7]),Integer.parseInt(tokens[8]),tokens[9],tokens[10],Double.parseDouble(tokens[11]));
                         break;
                     default:
                         continue;

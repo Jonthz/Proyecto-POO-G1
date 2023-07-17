@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-1|Jonathan|Zambrano|Espol|cuentafantasma63@gmail.com|1ef62013f28e97f69579402dfd1c1b01fa5a9344987edf0ba14a8c717931a274
-2|Luis|Velez|Espol|soygay@gmail.com|3891f13300b85e89d403504b4c26abe3adf5f39420a2d111059423cb25b33b86
-3|Joshua|Velez|Espol|zzzz@outlook.com|445c06f8335048bf3af883b047f79163c70083de3874e79ba1f7e621e0073579
-=======
 1|Darwin|Pacheco|hola|dapapare@espol.edu.ec|edf9cf90718610ee7de53c0dcc250739239044de9ba115bb0ca6026c3e4958a5
 2|Javier|Paredes|o|darwin@gmail.com|clave
 3|d|d|o|da@gmail.com|6d5074b4bf2b913866157d7674f1eda042c5c614876de876f7512702d2572a06
@@ -10,4 +5,3 @@
 4|5|AUTO|90|Toyota|azulin|tolon|2020|10000|azul|yolo|50.0|templados|hola
 4|5|AUTO|90|toyota|hol|hol|2020|1000|azul|hol|50.0|hol|hol
 4|5|AUTO|90|toyota|motorola|hellouda|2020|1000|azul|yolo|90.0|hola|adios
->>>>>>> 87d5c134de6f8d42b1e642a050da983adad26370

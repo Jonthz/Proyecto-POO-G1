@@ -20,6 +20,8 @@ public class VentaDeVehiculos {
         System.out.println("Hello World!");
         //Utilitaria.vaciarArchivo("compradores.txt");
         
+        Utilitaria u = new Utilitaria();
+        u.menu_principal();
 
     }
     
