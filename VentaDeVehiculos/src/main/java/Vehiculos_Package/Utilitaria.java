@@ -19,8 +19,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Scanner;
+/*
 import javax.mail.Session;
-
+*/
 
 /**
  *
@@ -182,7 +183,7 @@ public class Utilitaria {
         return null;
         }
     }
-    
+    /*
     private static void enviarConGMail(String destinatario, String asunto, String cuerpo) {
     //La dirección de correo de envío
     String remitente = "proyectojavap1@gmail.com";
@@ -214,5 +215,5 @@ public class Utilitaria {
         me.printStackTrace();   //Si se produce un error
     }
   }
-
+    */
 }

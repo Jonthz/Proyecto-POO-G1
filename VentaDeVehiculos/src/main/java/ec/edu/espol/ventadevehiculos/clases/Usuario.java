@@ -4,6 +4,7 @@
  */
 package ec.edu.espol.ventadevehiculos.clases;
 
+import Vehiculos_Package.Utilitaria;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
@@ -16,7 +17,7 @@ import java.util.Scanner;
  * @author Jonathan
  */
 public class Usuario {
-    /*
+    
     protected int id;
     protected String nombre;
     protected String apellidos;
@@ -31,7 +32,7 @@ public class Usuario {
         this.apellidos = apellidos;
         this.organizacion = organizacion;
         this.correo = correo;
-        this.clave = clave;
+        this.clave = Utilitaria.claveHash(clave);
        
     }
     public static boolean validarCorreoUnico(String correo, String nomfile){
@@ -46,12 +47,7 @@ public class Usuario {
         return true;
         //retorna true si al terminar de recorrer el archivo no encuentra un correo igual
     }
-   /* public static boolean validarCorreoCorrecto(String correo){
-        
-        String[] tokens = correo.split("@");
-    }   */
-    /*
-    public void registrarUsuario(String nomfile){
+    public static void registrarUsuario(String nomfile){
         Scanner sc = new Scanner(System.in);
         sc.useDelimiter("\n");
         System.out.println("Ingrese sus siguentes datos");
@@ -61,19 +57,31 @@ public class Usuario {
         String apellido=sc.nextLine();
         System.out.println("Correo: ");
         String correo= sc.nextLine();
-        if(Usuario.validarCorreoUnico(correo, nomfile)){
-            System.out.println("Correo valido");
-            System.out.println("Organización: ");
-            String organizacion=sc.nextLine();
-            System.out.println("Clave: ");
-            String clave= sc.nextLine();
-            int id = Utilitaria.generarID(nomfile);
-            Usuario u = new Usuario(id, nombre,apellido,organizacion,correo,clave);
-            u.saveFile(nomfile);
-        }
+        while(true){
+        if(Vehiculos_Package.Usuario.validarEstructuraCorreO(correo)){
+          if(Vehiculos_Package.Usuario.validarCorreoUnico(correo, nomfile)){
+            break;
+            }
+          else{
+            System.out.println("El correo ingresado ya se encuentra registrado. Intente de nuevo");
+            correo=sc.nextLine();
+            }  
+           }
         else{
-            System.out.println("Este correo ya se encuentra registrado");
+            System.out.println("Se ha ingresado un correo no valido");
+            correo=sc.nextLine();
+           }
         }
+        System.out.println("Correo valido");
+        System.out.println("Organización: ");
+        String organizacion=sc.nextLine();
+        System.out.println("Clave: ");
+        String clave= sc.nextLine();
+        int id = Utilitaria.generarID(nomfile);
+        Usuario u = new Usuario(id, nombre,apellido,organizacion,correo,clave);
+        sc.close();
+        u.saveFile(nomfile);
+        System.out.println("Se ha registrado con exito");
     }
     
     public void saveFile(String nomfile){
@@ -146,6 +154,5 @@ public class Usuario {
         }
         return Objects.equals(this.clave, other.clave);
     }
-    */
 }
    
