@@ -31,6 +31,7 @@ public class Vehiculo {
     protected double precio;
     protected ArrayList<Oferta>ofertas;
     protected Vendedor vendedor;
+    protected int idV;
     
 
     
@@ -156,10 +157,10 @@ public class Vehiculo {
       return null; 
     }
 
-    public void saveFile(String nomfile){
+    public void saveFile(String nomfile,Vendedor v){
        try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(nomfile), true))){
            //(int id, TipoVehiculo tipo,String placa, String marca, String modelo, String tipoMotor, int anio, int recorrido, String color, String tipoCombustible, double precio)
-            pw.println(this.id+"|"+this.tipo+"|"+this.placa+"|"+this.marca+"|"+this.modelo+"|"+this.tipoMotor+"|"+this.anio+"|"+this.recorrido+"|"+this.color+"|"+this.tipoCombustible+"|"+this.precio);
+            pw.println(v.getId()+"|"+this.id+"|"+this.tipo+"|"+this.placa+"|"+this.marca+"|"+this.modelo+"|"+this.tipoMotor+"|"+this.anio+"|"+this.recorrido+"|"+this.color+"|"+this.tipoCombustible+"|"+this.precio);
        }
        catch(Exception e){
            System.out.println(e.getMessage());
@@ -246,6 +247,24 @@ public class Vehiculo {
         return "placa: " + placa + "\nMarca: " + marca + "\nModelo: " + modelo + "\nTipo motor: " + tipoMotor + "\nAño: " + anio + "\nRecorrido: " + recorrido + "\nColor: " + color + "\nTipo combustible: " + tipoCombustible + "\nprecio: " + precio ;
     
     }
+    public static boolean buscarPlaca(String nomfile, String placa) {
+    try (Scanner sc = new Scanner(new File(nomfile))) {
+        while (sc.hasNextLine()) {
+            String linea = sc.nextLine();
+            String[] tokens = linea.split("\\|");
+            String placaExistente = tokens[2];
+
+            if (placaExistente.equals(placa)) {
+                return false; // La placa existe en el archivo
+            }
+        }
+    } catch (Exception e) {
+        System.out.println("Archivo no encontrado: " + e.getMessage());
+    }
+
+    return true; // La placa no existe en el archivo
+}
+
 
 
 }

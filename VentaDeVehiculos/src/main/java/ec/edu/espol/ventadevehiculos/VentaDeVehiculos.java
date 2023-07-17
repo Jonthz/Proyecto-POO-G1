@@ -9,6 +9,7 @@ import Vehiculos_Package.Utilitaria;
 import ec.edu.espol.ventadevehiculos.clases.Usuario;
 import java.util.ArrayList;
 
+
 /**
  *
  * @author Jonathan
@@ -18,11 +19,8 @@ public class VentaDeVehiculos {
     public static void main(String[] args) {
         System.out.println("Hello World!");
         //Utilitaria.vaciarArchivo("compradores.txt");
-        ArrayList<Vendedor> u = Vendedor.readFile("vendedores.txt");
-        Vendedor.saveFile(u, "vendores.txt");
-        sad
-        u.get(0);
         
+
     }
     
 }

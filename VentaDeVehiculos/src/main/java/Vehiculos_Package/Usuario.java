@@ -43,18 +43,18 @@ public class Usuario {
         return correoElectronico;
     }
     
-//     public static boolean validarCorreoUnico(String correo, String nomfile){
-//        ArrayList<Usuario> usuarios = Usuario.readFile(nomfile);
-//        for(Usuario u: usuarios){
-//            if(u.correoElectronico.equalsIgnoreCase( correo))
-//            {
-//                return false;
-//                //retorna false cuando encuentre un correo igual al ingresado por el usuario
-//            }
-//        }
-//        return true;
-//        //retorna true si al terminar de recorrer el archivo no encuentra un correo igual
-//    }
+     public static boolean validarCorreoUnico(String correo, String nomfile){
+        ArrayList<Usuario> usuarios = Usuario.readFile(nomfile);
+        for(Usuario u: usuarios){
+            if(u.correoElectronico.equalsIgnoreCase( correo))
+            {
+                return false;
+                //retorna false cuando encuentre un correo igual al ingresado por el usuario
+            }
+        }
+        return true;
+        //retorna true si al terminar de recorrer el archivo no encuentra un correo igual
+    }
      public static boolean validarEstructuraCorreO(String correo){
          int indarroba= correo.lastIndexOf("@");
          int indpunto= correo.lastIndexOf(".");
@@ -78,17 +78,17 @@ public class Usuario {
         }
     }
     // si quiero guardar toda la info a partir de un archivo o una lista
-//    public static void saveFile(ArrayList<Usuario> usuarios, String nomfile){
-//        try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(nomfile), true))){
-//            for(Usuario u: usuarios){
-//                pw.println(u.id+"|"+u.nombre+"|"+u.apellidos+"|"+u.organizacion+"|"+u.correoElectronico+"|"+u.clave);
-//            }
-//        }
-//        catch(Exception e){
-//            System.out.println(e.getMessage());
-//        }
-//    }
-    public static ArrayList<Usuario> readFileU(String nomfile){
+    public static void saveFile(ArrayList<Usuario> usuarios, String nomfile){
+        try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(nomfile), true))){
+            for(Usuario u: usuarios){
+                pw.println(u.id+"|"+u.nombre+"|"+u.apellidos+"|"+u.organizacion+"|"+u.correoElectronico+"|"+u.clave);
+            }
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+    public static ArrayList<Usuario> readFile(String nomfile){
         ArrayList<Usuario> usuarios = new ArrayList<>();
         try(Scanner sc = new Scanner(new File(nomfile))){
            while(sc.hasNextLine()){
@@ -103,40 +103,43 @@ public class Usuario {
         }
         return usuarios;
     }
-//     public void registrarUsuario(String nomfile){
-//        Scanner sc = new Scanner(System.in);
-//        sc.useDelimiter("\n");
-//        System.out.println("Ingrese sus siguentes datos");
-//        System.out.println("Nombre: ");
-//        String nombre=sc.nextLine();
-//        System.out.println("Apellido:");
-//        String apellido=sc.nextLine();
-//        System.out.println("Correo: ");
-//        String correo= sc.nextLine();
-//        if(Usuario.validarCorreoUnico(correo, nomfile)){
-//            System.out.println("Correo valido");
-//            System.out.println("Organización: ");
-//            String organizacion=sc.nextLine();
-//            System.out.println("Clave: ");
-//            String clave= sc.nextLine();
-//            int id = Utilitaria.generarID(nomfile);
-//            Usuario u = new Usuario(id, nombre,apellido,organizacion,correo,clave);
-//            u.saveFile(nomfile);
-//        }
-//        else{
-//            System.out.println("Este correo ya se encuentra registrado");
-//        }
-//    }
-       public static boolean validarCorreoUnico(String correo, String nomfile){
-        ArrayList<Usuario> usuarios = Usuario.readFileU(nomfile);
-        for(Usuario u: usuarios){
-            if(u.correoElectronico.equalsIgnoreCase( correo))
-            {
-                return false;
-                //retorna false cuando encuentre un correo igual al ingresado por el usuario
+
+    public static void registrarUsuario(String nomfile){
+        Scanner sc = new Scanner(System.in);
+        sc.useDelimiter("\n");
+        System.out.println("Ingrese sus siguentes datos");
+        System.out.println("Nombre: ");
+        String nombre=sc.nextLine();
+        System.out.println("Apellido:");
+        String apellido=sc.nextLine();
+        System.out.println("Correo: ");
+        String correo= sc.nextLine();
+        while(true){
+        if(validarEstructuraCorreO(correo)){
+          if(validarCorreoUnico(correo, nomfile)){
+            break;
             }
+          else{
+            System.out.println("El correo ingresado ya se encuentra registrado. Intente de nuevo");
+            correo=sc.nextLine();
+            }  
+           }
+        else{
+            System.out.println("Se ha ingresado un correo no valido");
+            correo=sc.nextLine();
+           }
         }
-        return true;
-        //retorna true si al terminar de recorrer el archivo no encuentra un correo igual
+        System.out.println("Correo valido");
+        System.out.println("Organización: ");
+        String organizacion=sc.nextLine();
+        System.out.println("Clave: ");
+        String clave= sc.nextLine();
+        clave=Utilitaria.claveHash(clave);
+        int id = Utilitaria.generarID(nomfile);
+        Usuario u = new Usuario(id, nombre,apellido,organizacion,correo,clave);
+        sc.close();
+        u.saveFile(nomfile);
+        System.out.println("Se ha registrado con exito");
+
     }
 }

@@ -48,11 +48,11 @@ public class Camionetas extends Vehiculo{
     public void setTraccion(int traccion) {
         this.traccion = traccion;
     }
-      @Override
-    public void saveFile(String nomfile){
+    @Override
+    public void saveFile(String nomfile,Vendedor v){
        try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(nomfile), true))){
            //(int id, TipoVehiculo tipo,String placa, String marca, String modelo, String tipoMotor, int anio, int recorrido, String color, String tipoCombustible, double precio)
-            pw.println(this.id+"|"+this.tipo+"|"+this.placa+"|"+this.marca+"|"+this.modelo+"|"+this.tipoMotor+"|"+this.anio+"|"+this.recorrido+"|"+this.color+"|"+this.tipoCombustible+"|"+this.precio+"|"+this.vidrios+"|"+this.transmision+"|"+this.traccion);
+            pw.println(v.getId()+"|"+this.id+"|"+this.tipo+"|"+this.placa+"|"+this.marca+"|"+this.modelo+"|"+this.tipoMotor+"|"+this.anio+"|"+this.recorrido+"|"+this.color+"|"+this.tipoCombustible+"|"+this.precio+"|"+this.vidrios+"|"+this.transmision+"|"+this.traccion);
        }
        catch(Exception e){
            System.out.println(e.getMessage());
