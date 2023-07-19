@@ -339,5 +339,20 @@ public class Comprador extends Usuario {
         }
         return compradorEncontrado;
     }
+        public static ArrayList<Usuario> readFile(String nomfile){
+        ArrayList<Usuario> usuarios = new ArrayList<>();
+        try(Scanner sc = new Scanner(new File(nomfile))){
+           while(sc.hasNextLine()){
+               String linea = sc.nextLine();
+               String[] s = linea.split("\\|");
+               Comprador u = new Comprador(Integer.parseInt(s[0]), s[1], s[2], s[3], s[4], s[5]);
+               usuarios.add(u);
+           }
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return usuarios;
+    }
 }
 

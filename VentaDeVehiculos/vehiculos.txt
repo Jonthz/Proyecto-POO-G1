@@ -1,2 +1,8 @@
 4|1|AUTO|90|toy|hol|fbgfmdf|2020|1000|dbvfnfddf|mdffdm|50.0|fmfd|dmdm
 4|5|MOTO|80|dnmdm|dmdm|mdmd|2020|1000|mdfdmd|mcmfmf|60.0
+5|5|AUTO|26B1|TOYOTA|CHEVRON|COMBUSTION|2004|100000|AZUL|DIESEL|10000.0|4|TRANS
+5|5|AUTO|24B4|hyunday|fercho|combustion|2003|10000|verde|diesel|12000.0|5|trans
+5|6|AUTO|24BX|chevrolet|vsitara|combustion|2004|1000|verde|diesel|100000.0|4|trans
+5|7|MOTO|placa|marca|mas|motor|2|12|az|dsad|122.0
+6|5|MOTO|addsfs|dsf|dasf|das|2|2|dsf|sdf|2.0
+7|5|MOTO|sadsf|dsf|sad|sdf|2|2|sdsf|ds|2.0

@@ -216,13 +216,13 @@ public class Vendedor extends Usuario {
         return vEncontrado;
     }
 
-    public static void ingresarVehiculo(String tipo_vehiculo,String nomfile,Vendedor v) {
+    public static void ingresarVehiculo(String tipo_vehiculo,String nomfileVehiculo,Vendedor v) {
         Scanner sc2 = new Scanner(System.in);
         sc2.useDelimiter("\n");
         sc2.useLocale(Locale.US);
         System.out.print("Ingrese la placa: ");
         String placa = sc2.nextLine();
-        boolean placaE= Vehiculo.buscarPlaca(nomfile, placa);
+        boolean placaE= Vehiculo.buscarPlaca(nomfileVehiculo, placa);
         if(!placaE){
             System.out.println("La placa ingresada ya existe en los registros");
         }
@@ -243,7 +243,8 @@ public class Vendedor extends Usuario {
         System.out.println("Ingrese el tipo de combustible del vehículo: ");
         String tipoCombustible = sc2.nextLine();
         double precio_V;
-        int id = Utilitaria.generarID(nomfile);
+        int id = Utilitaria.generarID(nomfileVehiculo);
+        
         if(tipo_vehiculo.equals("Auto")){
             System.out.println("Ingrese vidrio del vehiculo: ");
             String vidrio = sc2.nextLine();
@@ -252,7 +253,7 @@ public class Vendedor extends Usuario {
             System.out.println("Ingrese el precio del Vehiculo: ");
             precio_V = sc2.nextDouble();
             Auto auto_add = new Auto(id, TipoVehiculo.AUTO, placa, marca, modelo, tipoMotor, anioVehiculo, recorrido, color, tipoCombustible, precio_V, vidrio, transmision);
-            auto_add.saveFile(nomfile,v);
+            auto_add.saveFile(nomfileVehiculo,v);
         }
         else if(tipo_vehiculo.equals("Camioneta")){
             System.out.println("Ingrese vidrio del vehiculo: ");
@@ -266,14 +267,15 @@ public class Vendedor extends Usuario {
             precio_V = sc2.nextDouble();
 
             Camionetas cam_add = new Camionetas(id, TipoVehiculo.CAMIONETA, placa, marca, modelo, tipoMotor, anioVehiculo, recorrido, color, tipoCombustible, precio_V, vidrio, transmision, traccion);
+            
                 //int id, TipoVehiculo tipo,String placa, String marca, String modelo, String tipoMotor, int anio, int recorrido, String color, String tipoCombustible, double precio,String vidrios, String transmision, int traccion)
-            cam_add.saveFile(nomfile,v);
+            cam_add.saveFile(nomfileVehiculo,v);
         }
         else {
             System.out.println("Ingrese el precio del Vehiculo: ");
             precio_V = sc2.nextDouble();
             Vehiculo vh = new Vehiculo(id, TipoVehiculo.MOTO, placa, marca, modelo, tipoMotor, anioVehiculo, recorrido, color, tipoCombustible, precio_V);
-            vh.saveFile(nomfile,v);
+            vh.saveFile(nomfileVehiculo,v);
         }
         System.out.println("El vehiculo se ingreso exitosamente");
     }
@@ -290,6 +292,22 @@ public class Vendedor extends Usuario {
             }
         }
         return null;
+    }
+ 
+        public static ArrayList<Usuario> readFile(String nomfile){
+        ArrayList<Usuario> usuarios = new ArrayList<>();
+        try(Scanner sc = new Scanner(new File(nomfile))){
+           while(sc.hasNextLine()){
+               String linea = sc.nextLine();
+               String[] s = linea.split("\\|");
+               Vendedor u = new Vendedor(Integer.parseInt(s[0]), s[1], s[2], s[3], s[4], s[5]);
+               usuarios.add(u);
+           }
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return usuarios;
     }
 
 }

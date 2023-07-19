@@ -2,6 +2,4 @@
 2|Javier|Paredes|o|darwin@gmail.com|clave
 3|d|d|o|da@gmail.com|6d5074b4bf2b913866157d7674f1eda042c5c614876de876f7512702d2572a06
 4|da|pa|o|dar@gmail.com|6cdf3627e80a28f0d604a633b0a42d6577a9da43e1e7f63b0c2737c17f0e5880
-4|5|AUTO|90|Toyota|azulin|tolon|2020|10000|azul|yolo|50.0|templados|hola
-4|5|AUTO|90|toyota|hol|hol|2020|1000|azul|hol|50.0|hol|hol
-4|5|AUTO|90|toyota|motorola|hellouda|2020|1000|azul|yolo|90.0|hola|adios
+5|Jonathan|Zambrano|Espol|cuentafantasma63@gmail.com|dc255a745fe99c33fb529b081b8d332a4147381e3355700d1cd21a15733917b0
