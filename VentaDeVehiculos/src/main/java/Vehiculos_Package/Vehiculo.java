@@ -252,7 +252,7 @@ public class Vehiculo {
         while (sc.hasNextLine()) {
             String linea = sc.nextLine();
             String[] tokens = linea.split("\\|");
-            String placaExistente = tokens[2];
+            String placaExistente = tokens[3];
 
             if (placaExistente.equals(placa)) {
                 return false; // La placa existe en el archivo

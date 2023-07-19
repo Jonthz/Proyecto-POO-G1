@@ -137,7 +137,6 @@ public class Usuario {
         clave=Utilitaria.claveHash(clave);
         int id = Utilitaria.generarID(nomfile);
         Usuario u = new Usuario(id, nombre,apellido,organizacion,correo,clave);
-        sc.close();
         u.saveFile(nomfile);
         System.out.println("Se ha registrado con exito");
 

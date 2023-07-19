@@ -6,3 +6,5 @@
 5|7|MOTO|placa|marca|mas|motor|2|12|az|dsad|122.0
 6|5|MOTO|addsfs|dsf|dasf|das|2|2|dsf|sdf|2.0
 7|5|MOTO|sadsf|dsf|sad|sdf|2|2|sdsf|ds|2.0
+8|4|AUTO|90|toyota|toyota|toyota|2020|2000|toyota|toyota|90.5|toyota|toyota
+9|4|MOTO|302|dnnsjkfs|ksnfskds|snjdnddnp|2000|2000|snjsdn|dkds|20.0

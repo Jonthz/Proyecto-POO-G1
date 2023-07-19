@@ -150,7 +150,9 @@ public class Vendedor extends Usuario {
         sc.useDelimiter("\n");
         System.out.println("Ingrese sus credenciales para acceder a esta funcion: ");
         boolean acceso= false;
+        boolean metodoV;
         do{
+            metodoV= true;
             System.out.println("Ingrese su correo: ");
             String correo= sc.nextLine();
             System.out.println("Ingrese su clave: ");
@@ -181,11 +183,10 @@ public class Vendedor extends Usuario {
                 }
                 Vendedor v= buscarVendedor(correo,claveHash,"vendedores.txt");
                 ingresarVehiculo(tipo_vehiculo,nomfileVehiculo,v);
-                break;
+                metodoV=false;
             }
         }
-        while(true);
-        sc.close();
+        while(metodoV);
     }
     public static boolean validarCredenciales(String correo, String clave){
         Vendedor v = buscarVendedor(correo, clave, "vendedores.txt");
@@ -220,29 +221,68 @@ public class Vendedor extends Usuario {
         Scanner sc2 = new Scanner(System.in);
         sc2.useDelimiter("\n");
         sc2.useLocale(Locale.US);
+        boolean placaE;
+        String placa;
+        do{
         System.out.print("Ingrese la placa: ");
-        String placa = sc2.nextLine();
-        boolean placaE= Vehiculo.buscarPlaca(nomfileVehiculo, placa);
+        placa = sc2.nextLine();
+        placaE= Vehiculo.buscarPlaca(nomfileVehiculo, placa);
         if(!placaE){
             System.out.println("La placa ingresada ya existe en los registros");
+            }
         }
+        while(!placaE);
         System.out.println("Ingrese la marca del vehículo: ");
         String marca = sc2.nextLine();
         System.out.println("Ingrese el modelo del vehículo: ");
         String modelo = sc2.nextLine();
         System.out.println("Ingrese el tipo de motor del vehículo: ");
         String tipoMotor = sc2.nextLine();
+        boolean año=false;
+        int anioVehiculo = 0;
+        do{
         System.out.println("Ingrese el año del vehículo: ");
-        int anioVehiculo = sc2.nextInt();
+        if(!sc2.hasNextInt()){
+            System.out.println("Ingrese de forma correcta el año");
+            sc2.next();
+        }
+        else{
+            anioVehiculo = sc2.nextInt();
+            if(anioVehiculo<=0){
+                System.out.println("Ingrese un año valido");
+                }
+            else{
+                año=true;    
+                }
+            }
+        }
+        while((!año)||(anioVehiculo<=0));
         sc2.nextLine();
+        boolean recorrid=false;
+        int recorrido=0;
+        do{
         System.out.println("Ingrese el recorrido del vehículo: ");
-        int  recorrido = sc2.nextInt();
+        if(!sc2.hasNextInt()){
+            System.out.println("Ingrese de forma correcta el recorrido");
+            }
+        else{
+            recorrido = sc2.nextInt();
+            if(recorrido<=0){
+                System.out.println("Ingrese un recorrido valido");
+                }
+            else{
+                recorrid=true;    
+                }
+            }
+        }
+        while((!recorrid)||(recorrido<=0));
         sc2.nextLine();
         System.out.println("Ingrese el color del vehículo: ");
         String color = sc2.nextLine();
         System.out.println("Ingrese el tipo de combustible del vehículo: ");
         String tipoCombustible = sc2.nextLine();
-        double precio_V;
+        double precio_V=0;
+        boolean prec=false;
         int id = Utilitaria.generarID(nomfileVehiculo);
         
         if(tipo_vehiculo.equals("Auto")){
@@ -250,8 +290,22 @@ public class Vendedor extends Usuario {
             String vidrio = sc2.nextLine();
             System.out.println("Ingrese transmision del vehiculo: ");
             String transmision = sc2.nextLine();
+            do{
             System.out.println("Ingrese el precio del Vehiculo: ");
-            precio_V = sc2.nextDouble();
+            if(!sc2.hasNextDouble()){
+                System.out.println("Ingrese de forma correcta el precio");
+                }
+            else{
+                precio_V = sc2.nextDouble();
+                if(precio_V<=0){
+                    System.out.println("Ingrese un precio valido");
+                }
+                else{
+                    prec=true;    
+                    }
+                }
+            }
+            while((!prec)||(precio_V<=0));
             Auto auto_add = new Auto(id, TipoVehiculo.AUTO, placa, marca, modelo, tipoMotor, anioVehiculo, recorrido, color, tipoCombustible, precio_V, vidrio, transmision);
             auto_add.saveFile(nomfileVehiculo,v);
         }
@@ -263,8 +317,22 @@ public class Vendedor extends Usuario {
             System.out.println("Ingrese tracción  del vehiculo: ");
             int traccion = sc2.nextInt();
             sc2.nextLine();
+            do{
             System.out.println("Ingrese el precio del Vehiculo: ");
-            precio_V = sc2.nextDouble();
+            if(!sc2.hasNextDouble()){
+                System.out.println("Ingrese de forma correcta el precio");
+                }
+            else{
+                precio_V = sc2.nextDouble();
+                if(precio_V<=0){
+                    System.out.println("Ingrese un precio valido");
+                }
+                else{
+                    prec=true;    
+                    }
+                }
+            }
+            while((!prec)||(precio_V<=0));
 
             Camionetas cam_add = new Camionetas(id, TipoVehiculo.CAMIONETA, placa, marca, modelo, tipoMotor, anioVehiculo, recorrido, color, tipoCombustible, precio_V, vidrio, transmision, traccion);
             
@@ -272,8 +340,22 @@ public class Vendedor extends Usuario {
             cam_add.saveFile(nomfileVehiculo,v);
         }
         else {
+            do{
             System.out.println("Ingrese el precio del Vehiculo: ");
-            precio_V = sc2.nextDouble();
+            if(!sc2.hasNextDouble()){
+                System.out.println("Ingrese de forma correcta el precio");
+                }
+            else{
+                precio_V = sc2.nextDouble();
+                if(precio_V<=0){
+                    System.out.println("Ingrese un precio valido");
+                }
+                else{
+                    prec=true;    
+                    }
+                }
+            }
+            while((!prec)||(precio_V<=0));
             Vehiculo vh = new Vehiculo(id, TipoVehiculo.MOTO, placa, marca, modelo, tipoMotor, anioVehiculo, recorrido, color, tipoCombustible, precio_V);
             vh.saveFile(nomfileVehiculo,v);
         }
