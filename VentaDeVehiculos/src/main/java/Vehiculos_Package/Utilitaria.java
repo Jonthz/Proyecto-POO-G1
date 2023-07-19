@@ -87,7 +87,7 @@ public class Utilitaria {
             System.out.println("3. Regresar");
             opcion_selec=sc.nextInt();
             switch(opcion_selec){
-                case 1 -> Comprador.registrarComprador("compradores.txt");
+                case 1 -> Comprador.registrarUsuario("compradores.txt");
                 case 2 -> Comprador.accederHacerOferta();
                 case 3 ->{
                 }
@@ -157,14 +157,38 @@ public class Utilitaria {
     }
 
     
-    public static int obtenerEntero(Scanner scanner) {
+    public static int obtenerEntero(Scanner scanner,String campo) {
+    int numero=-1;
+    boolean validacion=false;
+    do{
     String input = scanner.nextLine();
     if (input.isEmpty()) {
         return 0;
         }
-    else{
-        return Integer.parseInt(input);
+    try{
+        numero=Integer.parseInt(input);
+        String[] tokens= campo.split(" ");
+        if(tokens[0].equals("recorrido")){
+            if(numero<0){
+                System.out.println("Ingrese un "+campo+" valido");
+                scanner.next();
+            }
         }
+        else if(numero<=0){
+                System.out.println("Ingrese un "+campo+" valido");
+                scanner.next();
+            }
+        else{
+            validacion=true;
+        }
+        }
+    catch(NumberFormatException e){
+        System.out.println("Ingrese de forma correcta el "+campo);
+        scanner.next();
+     }
+    }
+    while(!validacion);
+    return numero;
     }
 
     public static double obtenerDouble(Scanner scanner) {
@@ -185,7 +209,46 @@ public class Utilitaria {
         return null;
         }
     }
-
+    public static int validarIntPos(Scanner sc,String campo){
+        int numero=0;
+        boolean validacion = false;
+        do {
+            System.out.println("Ingrese el "+campo+" del vehículo: ");
+            if (!sc.hasNextInt()) {
+                System.out.println("Ingrese de forma correcta el"+campo);
+                sc.next();
+            } else {
+                numero = sc.nextInt();
+                if (numero <= 0) {
+                    System.out.println("Ingrese un "+campo+" válido");
+                } else {
+                    validacion = true;
+                }
+            }
+        } 
+        while ((!validacion) || (numero <= 0));
+        return numero;
+    }
+    public static double validarDoublePos(Scanner sc,String campo){
+        double numero=0;
+        boolean validacion = false;
+        do {
+            System.out.println("Ingrese el "+campo+" del vehículo: ");
+            if (!sc.hasNextDouble()) {
+                System.out.println("Ingrese de forma correcta el"+campo);
+                sc.next();
+            } else {
+                numero = sc.nextDouble();
+                if (numero <= 0) {
+                    System.out.println("Ingrese un "+campo+" válido");
+                } else {
+                    validacion = true;
+                }
+            }
+        } 
+        while ((!validacion) || (numero <= 0));
+        return numero;
+    }
     
     public static void enviarConGMail(String destinatario, String asunto, String cuerpo) {
     //La dirección de correo de envío

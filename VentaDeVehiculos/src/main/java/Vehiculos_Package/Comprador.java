@@ -83,49 +83,64 @@ public class Comprador extends Usuario {
     public void setOfertas(ArrayList<Oferta> ofertas) {
         this.ofertas = ofertas;
     }
-    
-    public static void registrarComprador(String nomFile){
-        Scanner sc = new Scanner(System.in);
+    public static void accederHacerOferta(){
+        Scanner sc= new Scanner(System.in);
         sc.useDelimiter("\n");
-        System.out.println("Ingrese sus siguentes datos");
-        System.out.println("Nombre: ");
-        String nombre=sc.nextLine();
-        System.out.println("Apellido:");
-        String apellido=sc.nextLine();
-        System.out.println("Correo: ");
-        String correo= sc.nextLine();
-        while(true){
-        if(Usuario.validarEstructuraCorreO(correo)){
-          if(Usuario.validarCorreoUnico(correo, nomFile)){
-            break;
+        System.out.println("Ingrese sus credenciales para acceder a esta funcion: ");
+        boolean acceso= false;
+        boolean metodoC= false;
+        do{
+            System.out.println("Ingrese su correo: ");
+            String correo= sc.nextLine();
+            System.out.println("Ingrese su clave: ");
+            String clave= sc.nextLine();
+            String claveHash= Utilitaria.claveHash(clave);
+            acceso= validarCredenciales(correo,claveHash);
+            if(!acceso){
+                System.out.println("Credenciales no validas");
+                System.out.println("Ingrese I si quiere intentar de nuevo, sino ingrese R para registrarse");
+                String opcion= sc.nextLine();
+                opcion=opcion.toUpperCase();
+                if(opcion.equals("R")){
+                    Usuario.registrarUsuario("compradores.txt");
+                    metodoC=true;
+                }
             }
-          else{
-            System.out.println("El correo ingresado ya se encuentra registrado. Intente de nuevo");
-            correo=sc.nextLine();
-            }  
-           }
-        else{
-            System.out.println("Se ha ingresado un correo no valido");
-            correo=sc.nextLine();
-           }
+            else{
+                Comprador c= buscarComprador(correo,claveHash,"compradores.txt");
+                hacerOferta(c);
+                metodoC=true;
+            }
         }
-        System.out.println("Organización: ");
-        String organizacion=sc.nextLine();
-        System.out.println("Clave");
-        String clave= sc.nextLine();
-        int id= Utilitaria.generarID(nomFile);
-        Comprador c= new Comprador(id,nombre,apellido,organizacion,correo,clave);
-        sc.close();
-        c.saveFile(nomFile);
-        System.out.println("El comprador se ha registrado con exito");
+        while(!metodoC);
     }
-    public void saveFileComp(String nomFile){
-        try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(nomFile),true))){
-            pw.println(this.id+"|"+this.nombre+"|"+this.apellidos+"|"+this.organizacion+"|"+this.correoElectronico+"|"+this.clave);
+    public static boolean validarCredenciales(String correo, String clave){
+        Comprador c = buscarComprador(correo, clave, "compradores.txt");
+        if(c==null){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+    public static Comprador buscarComprador(String correo, String clave,String nomFile){
+        Comprador compradorEncontrado= null;
+        try(Scanner sc= new Scanner(new File(nomFile))){
+            while(sc.hasNextLine()){
+                String linea= sc.nextLine();
+                String[] tokens=linea.split("\\|");
+                String correoC= tokens[4];
+                String claveC=tokens[5];
+                if(correoC.equals(correo)&& claveC.equals(clave)){
+                    compradorEncontrado= new Comprador(Integer.parseInt(tokens[0]),tokens[1],tokens[2],tokens[3],tokens[4],tokens[5]); 
+                    break;
+                }
+            }
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
+                System.out.println(e.getMessage());
         }
+        return compradorEncontrado;
     }
     public static void hacerOferta(Comprador c){
         ArrayList<Vehiculo> vehiculos= Vehiculo.leerVehiculos("vehiculos.txt");
@@ -134,7 +149,6 @@ public class Comprador extends Usuario {
         }
         ArrayList<Vehiculo> vehiculosFiltrados= buscarVehiculos(vehiculos);
         if(vehiculosFiltrados.isEmpty()){
-            System.out.println("hola");
             return;
         }
         recorrerVehiculos(vehiculosFiltrados,c);
@@ -144,30 +158,34 @@ public class Comprador extends Usuario {
         Scanner sc= new Scanner(System.in);
         sc.useDelimiter("\n");
         System.out.println("Ingrese los atributos con los que quiere buscar los vehiculos, si quiere buscar todas las opciones de un atributo deje vacio");
-        System.out.println("Tipo de Vehiculo: ");
+        System.out.println("Tipo de Vehiculo:");
         TipoVehiculo tipo= Utilitaria.obtenerTipoVehiculo(sc);
-        System.out.println("Recorrido minimo: ");
-        int recorr_min= Utilitaria.obtenerEntero(sc);
-        System.out.println("Recorrido maximo: ");
-        int recorr_max=Utilitaria.obtenerEntero(sc);
-        System.out.println("Año minimo");
-        int anio_min=Utilitaria.obtenerEntero(sc);
-        System.out.println("Año maximo");
-        int anio_max=Utilitaria.obtenerEntero(sc);
-        System.out.println("Precio minimo");
+        System.out.println("Recorrido minimo:");
+        int recorr_min= Utilitaria.obtenerEntero(sc,"recorrido minimo");
+        System.out.println("Recorrido maximo:");
+        int recorr_max=Utilitaria.obtenerEntero(sc,"recorrido maximo");
+        System.out.println("Año minimo:");
+        int anio_min=Utilitaria.obtenerEntero(sc,"año minimo");
+        System.out.println("Año maximo:");
+        int anio_max=Utilitaria.obtenerEntero(sc,"año maximo");
+        System.out.println("Precio minimo:");
         double prec_min=Utilitaria.obtenerDouble(sc);
-        System.out.println("Precio maximo");
+        System.out.println("Precio maximo:");
         double prec_max=Utilitaria.obtenerDouble(sc);
-        sc.close();
         for(Vehiculo v: vehiculos){
-            if((tipo==null||tipo==v.getTipo())&&(v.getRecorrido()>=recorr_min)&&(v.getRecorrido()<=recorr_max)&&(v.getAnio()>=anio_min)&&(v.getAnio()<=anio_max)&&(v.getPrecio()>=prec_min)&&(v.getPrecio()<=prec_max)){
+            if((tipo==null||tipo==v.getTipo())
+                    &&(recorr_min<=0||v.getRecorrido()>=recorr_min)
+                    &&(recorr_max<=0||v.getRecorrido()<=recorr_max)
+                    &&(anio_min<=0||v.getAnio()>=anio_min)
+                    &&(anio_max<=0||v.getAnio()<=anio_max)
+                    &&(prec_min<=0||v.getPrecio()>=prec_min)
+                    &&(prec_max<=0||v.getPrecio()<=prec_max)){
                 vehiculos_encontrados.add(v);
             }
         }
         if(vehiculos_encontrados.isEmpty()){
             System.out.println("No se ha encontrado ningun vehiculo que coincida con la busqueda");
         }
-        sc.close();
         return vehiculos_encontrados;
     }
     public static void recorrerVehiculos(ArrayList<Vehiculo> vehiculos,Comprador c){
@@ -231,7 +249,6 @@ public class Comprador extends Usuario {
                 System.out.println("Intente otra vez");
             }
         }
-        sc.close();
     }
     public static void registrarOferta(String nomFile,Vehiculo v, double precio,Comprador c){
         try(PrintWriter pw= new PrintWriter(new FileOutputStream(new File("ofertas.txt"),true))){
@@ -279,65 +296,6 @@ public class Comprador extends Usuario {
         catch(Exception e){
             System.out.println("Error al registrar la oferta del vehiculo"+e.getMessage());
         }
-    }
-    public static void accederHacerOferta(){
-        Scanner sc= new Scanner(System.in);
-        sc.useDelimiter("\n");
-        System.out.println("Ingrese sus credenciales para acceder a esta funcion: ");
-        boolean acceso= false;
-        do{
-            System.out.println("Ingrese su correo: ");
-            String correo= sc.nextLine();
-            System.out.println("Ingrese su clave: ");
-            String clave= sc.nextLine();
-            String claveHash= Utilitaria.claveHash(clave);
-            acceso= validarCredenciales(correo,claveHash);
-            if(!acceso){
-                System.out.println("Credenciales no validas");
-                System.out.println("Ingrese I si quiere intentar de nuevo, sino ingrese R para registrarse");
-                String opcion= sc.nextLine();
-                opcion=opcion.toUpperCase();
-                if(opcion.equals("R")){
-                    Usuario.registrarUsuario("compradores.txt");
-                    break;
-                }
-            }
-            else{
-                Comprador c= buscarComprador(correo,claveHash,"compradores.txt");
-                hacerOferta(c);
-                break;
-            }
-        }
-        while(true);
-        sc.close();
-    }
-    public static boolean validarCredenciales(String correo, String clave){
-        Comprador c = buscarComprador(correo, clave, "compradores.txt");
-        if(c==null){
-            return false;
-        }
-        else{
-            return true;
-        }
-    }
-    public static Comprador buscarComprador(String correo, String clave,String nomFile){
-        Comprador compradorEncontrado= null;
-        try(Scanner sc= new Scanner(new File(nomFile))){
-            while(sc.hasNextLine()){
-                String linea= sc.nextLine();
-                String[] tokens=linea.split("\\|");
-                String correoC= tokens[4];
-                String claveC=tokens[5];
-                if(correoC.equals(correo)&& claveC.equals(clave)){
-                    compradorEncontrado= new Comprador(Integer.parseInt(tokens[0]),tokens[1],tokens[2],tokens[3],tokens[4],tokens[5]); 
-                    break;
-                }
-            }
-        }
-        catch(Exception e){
-                System.out.println(e.getMessage());
-        }
-        return compradorEncontrado;
     }
         public static ArrayList<Usuario> readFile(String nomfile){
         ArrayList<Usuario> usuarios = new ArrayList<>();

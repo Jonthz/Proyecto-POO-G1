@@ -8,3 +8,6 @@
 7|5|MOTO|sadsf|dsf|sad|sdf|2|2|sdsf|ds|2.0
 8|4|AUTO|90|toyota|toyota|toyota|2020|2000|toyota|toyota|90.5|toyota|toyota
 9|4|MOTO|302|dnnsjkfs|ksnfskds|snjdnddnp|2000|2000|snjsdn|dkds|20.0
+10|4|AUTO|40509|toyota|toyo|toy|2020|20000|azul|f|60.5|sj|ssjs
+11|4|MOTO|20djd0|dndd|djdjd|jdjd|2020|200000|jdsjs|djsjs|1000.5
+12|4|MOTO|809h0j35j7bn|ndfdfjddse|fkdopr|pjepojorje|20303024|345780553|azul|hrhrerep|3.2034754E8
