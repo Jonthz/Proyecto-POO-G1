@@ -169,9 +169,9 @@ public class Comprador extends Usuario {
         System.out.println("Año maximo:");
         int anio_max=Utilitaria.obtenerEntero(sc,"año maximo");
         System.out.println("Precio minimo:");
-        double prec_min=Utilitaria.obtenerDouble(sc);
+        double prec_min=Utilitaria.obtenerDouble(sc,"precio minimo");
         System.out.println("Precio maximo:");
-        double prec_max=Utilitaria.obtenerDouble(sc);
+        double prec_max=Utilitaria.obtenerDouble(sc,"precio maximo");
         for(Vehiculo v: vehiculos){
             if((tipo==null||tipo==v.getTipo())
                     &&(recorr_min<=0||v.getRecorrido()>=recorr_min)
@@ -190,60 +190,52 @@ public class Comprador extends Usuario {
     }
     public static void recorrerVehiculos(ArrayList<Vehiculo> vehiculos,Comprador c){
         int indice=0;
-        boolean revisarAnteriorVehiculo=false;
+        boolean recorrer=true;
         Scanner sc= new Scanner(System.in);
         sc.useDelimiter("\n");
-        while(true){
-            if(!revisarAnteriorVehiculo){
-                System.out.println("Informacion del Vehiculo:");
-                Vehiculo v = vehiculos.get(indice);
-                if(v instanceof Auto){
-                    Auto a=(Auto)v;
-                    System.out.println(a.toString());
-                }
-                else if(v instanceof Camionetas){
-                    Camionetas cam=(Camionetas)v;
-                    System.out.println(cam.toString());
-                }
-                else{
-                    System.out.println(v.toString());
-                }
-            }
+        while(recorrer){
+            System.out.println("Informacion del Vehiculo:");
+            Vehiculo v = vehiculos.get(indice);
+            if(v instanceof Auto){
+                Auto a=(Auto)v;
+                System.out.println(a.toString());
+               }
+            else if(v instanceof Camionetas){
+                Camionetas cam=(Camionetas)v;
+                System.out.println(cam.toString());
+                 }
+            else{
+                System.out.println(v.toString());
+                 }
             System.out.println("¿Que desea hacer?");
             System.out.println("Para avanzar al siguiente vehiculo ingrese S");
             System.out.println("Para retroceder al anterior vehiculo ingrese A");
             System.out.println("Para terminar con la busqueda ingrese T");
             System.out.println("Para ofertar por un vehiculo ingrese O");
-            //sc.nextLine();
-            String opcion = sc.nextLine();
+            String opcion = sc.nextLine().toUpperCase();
             if(opcion.equalsIgnoreCase("S")){
-                if(!revisarAnteriorVehiculo){
-                    indice+=1;
-                }
-                revisarAnteriorVehiculo=false;
+                indice+=1;
                 if(indice>=vehiculos.size()){
                     System.out.println("Ha revisado todos los vehiculos");
-                    revisarAnteriorVehiculo=false;
+                    indice-=1;
                 }
             }
             else if(opcion.equalsIgnoreCase("A")){
-                if(revisarAnteriorVehiculo){
-                    indice-=1;
-                }
-                revisarAnteriorVehiculo=true;
+                indice-=1;
                 if(indice<0){
                     System.out.println("No existen vehiculos anteriores");
-                    revisarAnteriorVehiculo=false;
+                    indice+=1;
                 }
             }
             else if(opcion.equalsIgnoreCase("T")){
-                break;
+                recorrer=false;
             }
             else if(opcion.equalsIgnoreCase("O")){
                 Vehiculo vof= vehiculos.get(indice);
-                System.out.println("Ingrese el precio ofertado: ");
-                double preciof= sc.nextDouble();
+                System.out.println("Ingrese el precio que quiere ofertar: ");
+                double preciof= Utilitaria.obtenerDouble(sc,"precio");
                 registrarOferta("ofertas.txt",vof,preciof,c);
+                sc.nextLine();
             }
             else{
                 System.out.println("Intente otra vez");
@@ -252,45 +244,8 @@ public class Comprador extends Usuario {
     }
     public static void registrarOferta(String nomFile,Vehiculo v, double precio,Comprador c){
         try(PrintWriter pw= new PrintWriter(new FileOutputStream(new File("ofertas.txt"),true))){
-            boolean ofertaExistente= false;
             int idOfe= Utilitaria.generarID(nomFile);
-            try(Scanner sc = new Scanner(new File(nomFile))){
-                while(sc.hasNextLine()){
-                    String linea= sc.nextLine();
-                    String[] tokens= linea.split("\\|");
-                    int idVE= Integer.parseInt(tokens[1]);
-                    int idCE= Integer.parseInt(tokens[2]);
-                    double precE= Double.parseDouble(tokens[3]);
-                    if((idVE==v.getId())&&(idCE==c.getId())){
-                        ofertaExistente=true;
-                        System.out.println("Ya hiciste una oferta del mismo vehiculo");
-                        System.out.println("Precio por el que ofertaste:"+precE);
-                        System.out.println("¿Que quiere hacer?");
-                        System.out.println("1. Cambiar el precio");
-                        System.out.println("2. Eliminar la oferta");
-                        System.out.println("Ingrese la opcion");
-                        int opcion= sc.nextInt();
-                        switch(opcion){
-                        case 1 -> {
-                            System.out.println("Ingrese el nuevo precio:");
-                            int newPrecio= sc.nextInt();
-                            precE=newPrecio;
-                            System.out.println("El precio de la oferta ha sido cambiado");
-                            break;
-                        }
-                        case 2 -> System.out.println("La oferta ha sido eliminada");
-                        default -> {
-                            System.out.println("Ha ingresado una opcion invalida, la oferta sigue siendo la misma");
-                            break;
-                            }
-                        }
-                    }
-                    pw.println(tokens[0]+"|"+idVE+"|"+idCE+"|"+precE);
-                }
-            }
-            if(!ofertaExistente){
-                pw.println(idOfe+"+"+v.getId()+"|"+c.getId()+"|"+precio); 
-            }
+            pw.println(idOfe+"|"+v.getId()+"|"+c.getId()+"|"+precio); 
             System.out.println("La oferta ha sido registrada exitosamente");
         }
         catch(Exception e){

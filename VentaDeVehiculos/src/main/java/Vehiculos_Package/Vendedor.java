@@ -106,13 +106,11 @@ public class Vendedor extends Usuario {
         System.out.println("Se han realizado" + vehiculo.ofertas.size() + "ofertas");
         Vendedor.recorrerOfertas(vehiculo.ofertas, sc, nomfileVehiculo, vehiculo, vehiculos);    
     }
-    else
-            System.out.println("Credenciales no validas\n" +
-"Ingrese I si quiere intentar de nuevo, sino ingrese R para registrarse");
-    
-        
+    else{
+        System.out.println("Credenciales no validas");
+        System.out.println("Ingrese I si quiere intentar de nuevo, sino ingrese R para registrarse");
+        }
     }
-  
     public static void recorrerOfertas(ArrayList<Oferta> ofertas, Scanner sc, String nomfileVehiculo, Vehiculo vehiculo, ArrayList<Vehiculo> vehiculos){
         int ind=0;
         String opcion;

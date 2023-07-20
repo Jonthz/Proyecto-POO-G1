@@ -38,7 +38,7 @@ public class Utilitaria {
         do{
             System.out.println("Menu de opciones");
             System.out.println("1. Vendedor");
-            System.out.println("2. Comparador");
+            System.out.println("2. Comprador");
             System.out.println("3. Salir");
             opcion_selec=sc.nextInt();
             switch(opcion_selec){
@@ -191,22 +191,49 @@ public class Utilitaria {
     return numero;
     }
 
-    public static double obtenerDouble(Scanner scanner) {
+    public static double obtenerDouble(Scanner scanner,String campo) {
+    double numero=-1;
+    boolean validacion=false;
+    do{
     String input = scanner.nextLine();
     if (input.isEmpty()) {
         return 0;
         }
-    else{
-        return Double.parseDouble(input);
-        } 
+    try{
+        numero=Integer.parseInt(input);;
+        if(numero<=0){
+            System.out.println("Ingrese un "+campo+" valido");
+            scanner.next();
+            }
+        else{
+            validacion=true;
+        }
+        }
+    catch(NumberFormatException e){
+        System.out.println("Ingrese de forma correcta el "+campo);
+        scanner.next();
+     }
+    }
+    while(!validacion);
+    return numero;
     }
     public static TipoVehiculo obtenerTipoVehiculo(Scanner sc) {
-    String tipo = sc.nextLine().toUpperCase();
-    try {
+        String tipo = sc.nextLine().trim();
+        
+        if (tipo.isEmpty()) {
+            return null;
+        }
+        else{
+            tipo = tipo.toUpperCase();
+            while (!tipo.equals("AUTO") && !tipo.equals("CAMIONETA") && !tipo.equals("MOTO")) {
+                System.out.println("Tipo de vehículo no válido. Por favor, ingrese Auto, Camioneta o Moto.");
+                tipo = sc.nextLine().trim().toUpperCase();
+                if (tipo.isEmpty()) {
+                    return null;
+                }
+        }
+        
         return TipoVehiculo.valueOf(tipo);
-        } 
-    catch (IllegalArgumentException e) {
-        return null;
         }
     }
     public static int validarIntPos(Scanner sc,String campo){

@@ -11,3 +11,4 @@
 10|4|AUTO|40509|toyota|toyo|toy|2020|20000|azul|f|60.5|sj|ssjs
 11|4|MOTO|20djd0|dndd|djdjd|jdjd|2020|200000|jdsjs|djsjs|1000.5
 12|4|MOTO|809h0j35j7bn|ndfdfjddse|fkdopr|pjepojorje|20303024|345780553|azul|hrhrerep|3.2034754E8
+13|10|MOTO|dkodssjd|ksllsdfnsll|skmsdsndfdnasads|sadonsfao|2020|20000|cjlvfnfd|fdklnfnfdl|900.5
