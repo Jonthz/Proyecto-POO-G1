@@ -107,7 +107,9 @@ public class Vendedor extends Usuario {
         Vendedor.recorrerOfertas(vehiculo.ofertas, sc, nomfileVehiculo, vehiculo, vehiculos);    
     }
     else
-            System.out.println("Clave incorrecta");
+            System.out.println("Credenciales no validas\n" +
+"Ingrese I si quiere intentar de nuevo, sino ingrese R para registrarse");
+    
         
     }
   

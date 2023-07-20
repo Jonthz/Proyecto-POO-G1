@@ -214,7 +214,7 @@ public class Comprador extends Usuario {
             System.out.println("Para retroceder al anterior vehiculo ingrese A");
             System.out.println("Para terminar con la busqueda ingrese T");
             System.out.println("Para ofertar por un vehiculo ingrese O");
-            sc.nextLine();
+            //sc.nextLine();
             String opcion = sc.nextLine();
             if(opcion.equalsIgnoreCase("S")){
                 if(!revisarAnteriorVehiculo){

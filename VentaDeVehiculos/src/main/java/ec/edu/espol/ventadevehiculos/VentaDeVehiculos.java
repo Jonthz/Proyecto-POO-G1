@@ -20,5 +20,6 @@ public class VentaDeVehiculos {
         //Utilitaria.vaciarArchivo("compradores.txt");
         Utilitaria u = new Utilitaria();
         u.menu_principal();
+        
 }
 }
