@@ -204,7 +204,8 @@ public static void aceptarOferta(String nomfileVehiculo, String nomfileVendedor,
             case "3":
                 Oferta ofertaActual = ofertas.get(ind);
                 System.out.println("Oferta aceptada");
-                Vehiculo.eliminarVehiculo(nomfileVehiculo, vehiculo, vehiculos);
+                Vehiculo.eliminarVehiculo(nomfileVehiculo, vehiculo);
+                Oferta.eliminarOferta("ofertas.txt", vehiculo);
                 Utilitaria.enviarConGMail(ofertaActual.getCorreoElectronico(), "Oferta aceptada", "Su oferta para el vehiculo " + vehiculo.marca + " " + vehiculo.modelo + " ha sido aceptada");
                 break;
             default:

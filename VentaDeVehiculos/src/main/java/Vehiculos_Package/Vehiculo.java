@@ -287,7 +287,7 @@ public class Vehiculo {
     }
     
     
-        public static void eliminarVehiculo(String nomfile, Vehiculo vehiculo, ArrayList<Vehiculo> vehiculos){
+        public static void eliminarVehiculo(String nomfile, Vehiculo vehiculo){
             Vehiculo.eliminarFila(nomfile,vehiculo.getId());
             
         }

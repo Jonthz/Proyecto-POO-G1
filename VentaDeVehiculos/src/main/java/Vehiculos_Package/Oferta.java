@@ -4,8 +4,12 @@
  */
 package Vehiculos_Package;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -120,7 +124,36 @@ public class Oferta {
             System.out.println("No hay más ofertas disponibles.");
         }
     }
+    public static void eliminarFila(String nomfile, int idV) {
+        try {
+            // Cargar el contenido del archivo en memoria (lista de cadenas)
+            ArrayList<String> lineasArchivo = new ArrayList<>();
+            try (BufferedReader br = new BufferedReader(new FileReader(nomfile))) {
+                String linea;
+                while ((linea = br.readLine()) != null) {
+                    String[] tokens=linea.split("\\|");
+                    int idVF= Integer.parseInt(tokens[1]);
+                    if(idV!=idVF){
+                        lineasArchivo.add(linea);
+                    }
+                }
+            }
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(nomfile))) {
+                for (String linea : lineasArchivo) {
+                    bw.write(linea);
+                    bw.newLine();
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error al leer o escribir en el archivo: " + e.getMessage());
+        }
+    }
     
+    
+        public static void eliminarOferta(String nomfile, Vehiculo vehiculo){
+            Oferta.eliminarFila(nomfile,vehiculo.getId());
+            
+        }
 }
 
 
