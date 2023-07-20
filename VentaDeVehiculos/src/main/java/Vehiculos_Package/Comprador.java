@@ -87,7 +87,6 @@ public class Comprador extends Usuario {
         Scanner sc= new Scanner(System.in);
         sc.useDelimiter("\n");
         System.out.println("Ingrese sus credenciales para acceder a esta funcion: ");
-        boolean acceso= false;
         boolean metodoC= false;
         do{
             System.out.println("Ingrese su correo: ");
@@ -95,7 +94,7 @@ public class Comprador extends Usuario {
             System.out.println("Ingrese su clave: ");
             String clave= sc.nextLine();
             String claveHash= Utilitaria.claveHash(clave);
-            acceso= validarCredenciales(correo,claveHash);
+            boolean acceso= validarCredenciales(correo,claveHash);
             if(!acceso){
                 System.out.println("Credenciales no validas");
                 System.out.println("Ingrese I si quiere intentar de nuevo, sino ingrese R para registrarse");
@@ -142,6 +141,7 @@ public class Comprador extends Usuario {
         }
         return compradorEncontrado;
     }
+    
     public static void hacerOferta(Comprador c){
         ArrayList<Vehiculo> vehiculos= Vehiculo.leerVehiculos("vehiculos.txt");
         if(vehiculos.isEmpty()){
@@ -161,6 +161,7 @@ public class Comprador extends Usuario {
         System.out.println("Tipo de Vehiculo:");
         TipoVehiculo tipo= Utilitaria.obtenerTipoVehiculo(sc);
         System.out.println("Recorrido minimo:");
+        sc.next();
         int recorr_min= Utilitaria.obtenerEntero(sc,"recorrido minimo");
         System.out.println("Recorrido maximo:");
         int recorr_max=Utilitaria.obtenerEntero(sc,"recorrido maximo");
@@ -245,7 +246,7 @@ public class Comprador extends Usuario {
     public static void registrarOferta(String nomFile,Vehiculo v, double precio,Comprador c){
         try(PrintWriter pw= new PrintWriter(new FileOutputStream(new File("ofertas.txt"),true))){
             int idOfe= Utilitaria.generarID(nomFile);
-            pw.println(idOfe+"|"+v.getId()+"|"+c.getId()+"|"+precio); 
+            pw.println(idOfe+"|"+v.getId()+"|"+c.getId()+"|"+c.getCorreoElectronico()+"|"+precio); 
             System.out.println("La oferta ha sido registrada exitosamente");
         }
         catch(Exception e){

@@ -7,8 +7,12 @@ package Vehiculos_Package;
 import static Vehiculos_Package.TipoVehiculo.AUTO;
 import static Vehiculos_Package.TipoVehiculo.CAMIONETA;
 import static Vehiculos_Package.TipoVehiculo.MOTO;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -204,13 +208,13 @@ public class Vehiculo {
                 Vehiculo v;
                 switch(tipo){
                     case AUTO:
-                        v= new Auto(Integer.parseInt(tokens[1]),tipo,tokens[3],tokens[4],tokens[5],tokens[6],Integer.parseInt(tokens[7]),Integer.parseInt(tokens[8]),tokens[9],tokens[10],Double.parseDouble(tokens[11]),tokens[12],tokens[13]);
+                        v= new Auto(Integer.parseInt(tokens[0]),tipo,tokens[3],tokens[4],tokens[5],tokens[6],Integer.parseInt(tokens[7]),Integer.parseInt(tokens[8]),tokens[9],tokens[10],Double.parseDouble(tokens[11]),tokens[12],tokens[13]);
                         break;
                     case CAMIONETA:
-                        v= new Camionetas(Integer.parseInt(tokens[1]),tipo,tokens[3],tokens[4],tokens[5],tokens[6],Integer.parseInt(tokens[7]),Integer.parseInt(tokens[8]),tokens[9],tokens[10],Double.parseDouble(tokens[11]),tokens[12],tokens[13],Integer.parseInt(tokens[14]));
+                        v= new Camionetas(Integer.parseInt(tokens[0]),tipo,tokens[3],tokens[4],tokens[5],tokens[6],Integer.parseInt(tokens[7]),Integer.parseInt(tokens[8]),tokens[9],tokens[10],Double.parseDouble(tokens[11]),tokens[12],tokens[13],Integer.parseInt(tokens[14]));
                         break;
                     case MOTO:
-                        v= new Vehiculo(Integer.parseInt(tokens[1]),tipo,tokens[3],tokens[4],tokens[5],tokens[6],Integer.parseInt(tokens[7]),Integer.parseInt(tokens[8]),tokens[9],tokens[10],Double.parseDouble(tokens[11]));
+                        v= new Vehiculo(Integer.parseInt(tokens[0]),tipo,tokens[3],tokens[4],tokens[5],tokens[6],Integer.parseInt(tokens[7]),Integer.parseInt(tokens[8]),tokens[9],tokens[10],Double.parseDouble(tokens[11]));
                         break;
                     default:
                         continue;
@@ -224,23 +228,87 @@ public class Vehiculo {
         }
         return vehiculos;
         }
+        public static ArrayList<Vehiculo> leerVehiculos(String nomFile,Vendedor ve){
+        ArrayList<Vehiculo> vehiculos= new ArrayList<>();
+        try(Scanner sc= new Scanner(new File(nomFile))){
+            while(sc.hasNextLine()){
+                String linea= sc.nextLine();
+                String [] tokens= linea.split("\\|");
+                int idV= Integer.parseInt(tokens[1]);
+                TipoVehiculo tipo= TipoVehiculo.valueOf(tokens[2].toUpperCase());
+                Vehiculo v;
+                switch(tipo){
+                    case AUTO:
+                        v= new Auto(Integer.parseInt(tokens[0]),tipo,tokens[3],tokens[4],tokens[5],tokens[6],Integer.parseInt(tokens[7]),Integer.parseInt(tokens[8]),tokens[9],tokens[10],Double.parseDouble(tokens[11]),tokens[12],tokens[13]);
+                        break;
+                    case CAMIONETA:
+                        v= new Camionetas(Integer.parseInt(tokens[0]),tipo,tokens[3],tokens[4],tokens[5],tokens[6],Integer.parseInt(tokens[7]),Integer.parseInt(tokens[8]),tokens[9],tokens[10],Double.parseDouble(tokens[11]),tokens[12],tokens[13],Integer.parseInt(tokens[14]));
+                        break;
+                    case MOTO:
+                        v= new Vehiculo(Integer.parseInt(tokens[0]),tipo,tokens[3],tokens[4],tokens[5],tokens[6],Integer.parseInt(tokens[7]),Integer.parseInt(tokens[8]),tokens[9],tokens[10],Double.parseDouble(tokens[11]));
+                        break;
+                    default:
+                        continue;
+                }
+                if(idV==ve.getId()){
+                    vehiculos.add(v);
+                }
+            }
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+            vehiculos.clear();
+        }
+        return vehiculos;
+        }
+        public static void eliminarFila(String nomfile, int idV) {
+        try {
+            // Cargar el contenido del archivo en memoria (lista de cadenas)
+            ArrayList<String> lineasArchivo = new ArrayList<>();
+            try (BufferedReader br = new BufferedReader(new FileReader(nomfile))) {
+                String linea;
+                while ((linea = br.readLine()) != null) {
+                    String[] tokens=linea.split("\\|");
+                    int idVF= Integer.parseInt(tokens[0]);
+                    if(idV!=idVF){
+                        lineasArchivo.add(linea);
+                    }
+                }
+            }
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(nomfile))) {
+                for (String linea : lineasArchivo) {
+                    bw.write(linea);
+                    bw.newLine();
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error al leer o escribir en el archivo: " + e.getMessage());
+        }
+    }
+    
     
         public static void eliminarVehiculo(String nomfile, Vehiculo vehiculo, ArrayList<Vehiculo> vehiculos){
-            vehiculos.remove(vehiculo);
-            Utilitaria.vaciarArchivo(nomfile);
-            Vehiculo.saveFile(vehiculos, nomfile);
+            Vehiculo.eliminarFila(nomfile,vehiculo.getId());
             
         }
     
         public static ArrayList<Oferta> rellenarOfertasVehiculo(String nomfile, Vehiculo vehiculo){
-            ArrayList<Oferta> ofertas = Oferta.readFile(nomfile);
-            ArrayList<Oferta> vOf = new ArrayList<>();
-            for(Oferta of: ofertas){
-                if(of.getIdVehiculo() == vehiculo.id)
-                    vOf.add(of);
-                
+            ArrayList<Oferta> ofertas= new ArrayList<>();
+            try(Scanner sc = new Scanner(new File(nomfile))){
+                while(sc.hasNextLine()){
+                    String linea= sc.nextLine();
+                    String[] s= linea.split("\\|");
+                    int idV= Integer.parseInt(s[1]);
+                    Oferta of = new Oferta(Integer.parseInt(s[0]),Integer.parseInt(s[1]),Integer.parseInt(s[2]),Double.parseDouble(s[4]),s[3]);
+                    if(idV==vehiculo.getId()){
+                        ofertas.add(of);
+                    }
+                }
             }
-            return vOf;
+            catch(Exception e){
+                System.out.println(e.getMessage());
+            }
+            return ofertas;
         }
     @Override
     public String toString() {

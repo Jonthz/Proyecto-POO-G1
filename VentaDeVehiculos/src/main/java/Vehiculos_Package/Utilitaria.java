@@ -67,7 +67,7 @@ public class Utilitaria {
             switch(opcion_selec){
                 case 1 -> Usuario.registrarUsuario("vendedores.txt");
                 case 2 -> Vendedor.ingresarSistema("vehiculos.txt","vendedores.txt");
-                case 3 -> Vendedor.aceptarOferta("vehiculos.txt","vendedores.txt","ofertas.txt");
+                case 3 -> Vendedor.accederAceptarOferta("vehiculos.txt","vendedores.txt","ofertas.txt");
                 case 4 -> {
                 }
                 default -> System.out.println("Opcion invalida. Intente de nuevo");
@@ -171,12 +171,10 @@ public class Utilitaria {
         if(tokens[0].equals("recorrido")){
             if(numero<0){
                 System.out.println("Ingrese un "+campo+" valido");
-                scanner.next();
             }
         }
         else if(numero<=0){
                 System.out.println("Ingrese un "+campo+" valido");
-                scanner.next();
             }
         else{
             validacion=true;
@@ -184,7 +182,6 @@ public class Utilitaria {
         }
     catch(NumberFormatException e){
         System.out.println("Ingrese de forma correcta el "+campo);
-        scanner.next();
      }
     }
     while(!validacion);
@@ -203,7 +200,6 @@ public class Utilitaria {
         numero=Integer.parseInt(input);;
         if(numero<=0){
             System.out.println("Ingrese un "+campo+" valido");
-            scanner.next();
             }
         else{
             validacion=true;
@@ -211,7 +207,6 @@ public class Utilitaria {
         }
     catch(NumberFormatException e){
         System.out.println("Ingrese de forma correcta el "+campo);
-        scanner.next();
      }
     }
     while(!validacion);

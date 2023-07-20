@@ -21,12 +21,14 @@ public class Oferta {
     private Comprador comprador;
     private int idComprador;
     private int id;
+    private String correoElectronico;
     
-    public Oferta(int idVehiculo, double precio, int idComprador, int id) {
+    public Oferta(int id,int idVehiculo,int idComprador, double precio, String ce) {
         this.idVehiculo = idVehiculo;
         this.precio = precio;
         this.idComprador = idComprador;
         this.id = id;
+        this.correoElectronico=ce;
     }
 
     public Vehiculo getVehiculo() {
@@ -76,24 +78,13 @@ public class Oferta {
     public void setId(int id) {
         this.id = id;
     }
-    
-    public void saveFile(String nomfile){
-        try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(nomfile), true))){
-            pw.println(this.idVehiculo+"|"+this.precio+"|"+this.idComprador+"|"+this.id);
-        }
-        catch(Exception e){
-            System.out.println(e.getMessage());
-        }
+
+    public String getCorreoElectronico() {
+        return correoElectronico;
     }
-    public static void saveFile(ArrayList<Oferta> ofertas, String nomfile){
-        try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(nomfile), true))){
-            for(Oferta of: ofertas){
-                pw.println(of.idVehiculo+"|"+of.precio+"|"+of.idComprador+"|"+of.id);
-            }
-        }
-        catch(Exception e){
-            System.out.println(e.getMessage());
-        }
+
+    public void setCorreoElectronico(String correoElectronico) {
+        this.correoElectronico = correoElectronico;
     }
     public static ArrayList<Oferta> readFile(String nomfile){
         ArrayList<Oferta> ofertas = new ArrayList<>();
@@ -101,7 +92,7 @@ public class Oferta {
            while(sc.hasNextLine()){
                String linea = sc.nextLine();
                String[] s = linea.split("\\|");
-               Oferta of = new Oferta(Integer.parseInt(s[0]), Double.parseDouble(s[1]), Integer.parseInt(s[2]), Integer.parseInt(s[0]));
+               Oferta of = new Oferta(Integer.parseInt(s[0]),Integer.parseInt(s[1]),Integer.parseInt(s[2]),Double.parseDouble(s[4]),s[3]);
                ofertas.add(of);
            }
         }
@@ -119,30 +110,14 @@ public class Oferta {
       return null; 
     }
     
-      public static void revisarOfertaActual(int ind, ArrayList<Oferta> ofertas) {
+      public static void revisarOfertaActual(int ind, ArrayList<Oferta> ofertas){
         if (ind >= 0 && ind < ofertas.size()) {
             Oferta ofertaActual = ofertas.get(ind);
             System.out.println("Oferta #" + (ind + 1) + ":");
-            System.out.println("Correo: " + ofertaActual.getComprador().correoElectronico); 
+            System.out.println("Correo: " + ofertaActual.correoElectronico); 
             System.out.println("Precio ofertado: " + ofertaActual.precio);
         } else {
             System.out.println("No hay más ofertas disponibles.");
-        }
-    }
-    public static void avanzarOferta(int ind, ArrayList<Oferta> ofertas) {
-        if (ind < ofertas.size() - 1) {
-            ind++;
-            revisarOfertaActual(ind, ofertas);
-        } else {
-            System.out.println("Ya has revisado todas las ofertas.");
-        }
-    }
-    public static void retrocederOferta(int ind, ArrayList<Oferta> ofertas) {
-        if (ind > 0) {
-            ind--;
-            revisarOfertaActual(ind, ofertas);
-        } else {
-            System.out.println("No puedes retroceder más, es la primera oferta.");
         }
     }
     

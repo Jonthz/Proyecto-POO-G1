@@ -86,62 +86,135 @@ public class Vendedor extends Usuario {
     public void setVehiculos(ArrayList<Vehiculo> vehiculos) {
         this.vehiculos = vehiculos;
     }
-    public static void aceptarOferta(String nomfileVehiculo, String nomfileVendedor, String nomfileOferta){
+    public static void accederAceptarOferta(String nomfileVehiculo, String nomfileVendedor, String nomfileOferta){
         
     ArrayList<Usuario> users = Usuario.readFile(nomfileVendedor);
-    ArrayList<Vehiculo> vehiculos = Vehiculo.leerVehiculos(nomfileVehiculo);
     Scanner sc = new Scanner(System.in);
     sc.useDelimiter("\n");
-    System.out.println("Ingrese su correo");
-    String correo = sc.nextLine();
-    System.out.println("Ingrese su clave");
-    String clave = sc.nextLine();
-    Vendedor vendedor = Vendedor.buscarPorCorreo(users, correo);
-    if(vendedor.validarClave(clave)){
-        System.out.println("Ingrese la placa: ");
-        String placa = sc.nextLine();
-        Vehiculo vehiculo = Vehiculo.buscarPorPlaca(vehiculos, placa);
-        vehiculo.ofertas = Vehiculo.rellenarOfertasVehiculo(nomfileOferta, vehiculo);
-        System.out.println(vehiculo.marca + vehiculo.modelo + "Precio: " + vehiculo.precio);
-        System.out.println("Se han realizado" + vehiculo.ofertas.size() + "ofertas");
-        Vendedor.recorrerOfertas(vehiculo.ofertas, sc, nomfileVehiculo, vehiculo, vehiculos);    
-    }
-    else{
-        System.out.println("Credenciales no validas");
-        System.out.println("Ingrese I si quiere intentar de nuevo, sino ingrese R para registrarse");
-        }
-    }
-    public static void recorrerOfertas(ArrayList<Oferta> ofertas, Scanner sc, String nomfileVehiculo, Vehiculo vehiculo, ArrayList<Vehiculo> vehiculos){
-        int ind=0;
-        String opcion;
-        do {
-            Oferta.revisarOfertaActual(ind, ofertas);
-            System.out.println("Para avanzar a la siguiente oferta escriba 1");
-            System.out.println("Para retroceder a la anterior oferta escriba 2");
-            System.out.println("Para aceptar la oferta escriba 3");
-            System.out.println("Para cerrar las ofertas escriba 4");
-            System.out.print("Elige una opción: ");
-            opcion = sc.nextLine();
-            
-            switch (opcion) {
-                case "1":
-                    Oferta.avanzarOferta(ind, ofertas);
-                    break;
-                case "2":
-                    Oferta.retrocederOferta(ind, ofertas);
-                    break;
-                case "3":
-                    System.out.println("Oferta aceptada");
-                    Vehiculo.eliminarVehiculo(nomfileVehiculo, vehiculo, vehiculos);
-                    Utilitaria.enviarConGMail(ofertas.get(ind).getComprador().correoElectronico, "Oferta aceptada", "Su oferta para el vehiculo" + vehiculo.marca + vehiculo.modelo + "ha sido aceptada");
-                    break;
-                default:
-                    System.out.println("Opción inválida. Inténtalo de nuevo.");
+    System.out.println("Ingrese sus credenciales para acceder a esta funcion: ");
+    boolean metodoV= false;
+        do{
+            System.out.println("Ingrese su correo: ");
+            String correo= sc.nextLine();
+            System.out.println("Ingrese su clave: ");
+            String clave= sc.nextLine();
+            String claveHash= Utilitaria.claveHash(clave);
+            boolean acceso= validarCredenciales(correo,claveHash);
+            if(!acceso){
+                System.out.println("Credenciales no validas");
+                System.out.println("Ingrese I si quiere intentar de nuevo, sino ingrese R para registrarse");
+                String opcion= sc.nextLine();
+                opcion=opcion.toUpperCase();
+                if(opcion.equals("R")){
+                    Usuario.registrarUsuario("compradores.txt");
+                    metodoV=true;
+                }
             }
-            
-            System.out.println();
-        } while (!opcion.equals("3") || !opcion.equals("4"));
+            else{
+                Vendedor vendedor = Vendedor.buscarVendedor(correo,claveHash,nomfileVendedor);
+                ArrayList<Vehiculo> vehiculos = Vehiculo.leerVehiculos(nomfileVehiculo,vendedor);
+                Vehiculo v= Vendedor.validarPlaca(nomfileVehiculo, vendedor, sc,vehiculos);
+                if(v==null){
+                    metodoV=true;
+                }
+                else{
+                    aceptarOferta(nomfileVehiculo,nomfileVendedor,nomfileOferta, vendedor,sc,v,vehiculos);
+                    metodoV=true;
+                }
+            }
+        }
+        while(!metodoV);
     }
+    public static Vehiculo validarPlaca(String nomfileVehiculo, Vendedor v,Scanner sc,ArrayList<Vehiculo> vehiculos){
+                String placa;
+                Vehiculo vehiculo;
+                boolean vehiculoP= false;
+                do{
+                    System.out.print("Ingrese la placa: ");
+                    placa = sc.nextLine();
+                    vehiculo = Vehiculo.buscarPorPlaca(vehiculos, placa);
+                    if(vehiculo==null){
+                        System.out.println("La placa ingresada no existe");
+                        System.out.println("Ingrese I si quiere intentar de nuevo, sino inrese R para registrar un vehiculo");
+                        String opcion= sc.nextLine();
+                        opcion=opcion.toUpperCase();
+                        if(opcion.equals("R")){
+                            Vendedor.ingresarSistema("vehiculos.txt", "vendedores.txt");
+                            vehiculoP=true;
+                            return null;
+                        }
+                    }
+                    else{
+                        vehiculoP=true;
+                    }
+                }
+                while(!vehiculoP);
+                return vehiculo;
+            }
+public static void aceptarOferta(String nomfileVehiculo, String nomfileVendedor, String nomfileOferta, Vendedor v, Scanner sc, Vehiculo vehiculo, ArrayList<Vehiculo> vehiculos) {
+        vehiculo.ofertas = Vehiculo.rellenarOfertasVehiculo(nomfileOferta, vehiculo);
+        if (vehiculo.ofertas.isEmpty()) {
+            System.out.println("No se han encontrado ofertas para este vehiculo");
+            return;
+        } 
+        int ofertas = vehiculo.ofertas.size();
+            if (ofertas == 1) {
+                System.out.println("Se ha realizado 1 oferta");
+            } else {
+                System.out.println("Se han realizado " + ofertas + " ofertas");
+            }
+        Vendedor.recorrerOfertas(vehiculo.ofertas, sc, nomfileVehiculo, vehiculo, vehiculos);
+}
+
+
+    public static void recorrerOfertas(ArrayList<Oferta> ofertas, Scanner sc, String nomfileVehiculo, Vehiculo vehiculo, ArrayList<Vehiculo> vehiculos) {
+    int ind = 0;
+    String opcion;
+    do {
+        System.out.println("Marca: " + vehiculo.marca);
+        System.out.println("Modelo: " + vehiculo.modelo);
+        System.out.println("Precio: " + vehiculo.precio);
+        
+        Oferta.revisarOfertaActual(ind, ofertas);
+
+        System.out.println("Para avanzar a la siguiente oferta escriba 1");
+        System.out.println("Para retroceder a la anterior oferta escriba 2");
+        System.out.println("Para aceptar la oferta escriba 3");
+        System.out.println("Para cerrar las ofertas escriba 4");
+        System.out.print("Elige una opción: ");
+        opcion = sc.nextLine();
+
+        switch (opcion) {
+            case "1":
+                ind++;
+                if (ind < ofertas.size()) {
+                    Oferta.revisarOfertaActual(ind, ofertas);
+                } else {
+                    System.out.println("Ya has revisado todas las ofertas.");
+                }
+                break;
+            case "2":
+                ind--;
+                if (ind >= 0) {
+                    Oferta.revisarOfertaActual(ind, ofertas);
+                } else {
+                    System.out.println("No puedes retroceder más, es la primera oferta.");
+                }
+                break;
+            case "3":
+                Oferta ofertaActual = ofertas.get(ind);
+                System.out.println("Oferta aceptada");
+                Vehiculo.eliminarVehiculo(nomfileVehiculo, vehiculo, vehiculos);
+                Utilitaria.enviarConGMail(ofertaActual.getCorreoElectronico(), "Oferta aceptada", "Su oferta para el vehiculo " + vehiculo.marca + " " + vehiculo.modelo + " ha sido aceptada");
+                break;
+            default:
+                System.out.println("Opción inválida. Inténtalo de nuevo.");
+        }
+
+        System.out.println();
+    } while (!opcion.equals("3") && !opcion.equals("4"));
+}
+
     
 
     public static void ingresarSistema(String nomfileVehiculo, String nomfileVendedor) {
@@ -283,21 +356,6 @@ public class Vendedor extends Usuario {
         }
         System.out.println("El vehiculo se ingreso exitosamente");
     }
-
-    public boolean validarClave(String clave) {
-        String clave_h = Utilitaria.claveHash(clave);
-        return this.clave.equals(clave_h);
-    }
-
-    public static Vendedor buscarPorCorreo(ArrayList<Usuario> users, String correo) {
-        for (Usuario u : users) {
-            if (u.correoElectronico.equals(correo)) {
-                return (Vendedor)u;
-            }
-        }
-        return null;
-    }
- 
         public static ArrayList<Usuario> readFile(String nomfile){
         ArrayList<Usuario> usuarios = new ArrayList<>();
         try(Scanner sc = new Scanner(new File(nomfile))){
